@@ -3,8 +3,136 @@
 <ContentPage
     x:Class="Maui.TouchEffect.Sample.Pages.TouchEffectPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    <ContentPage.Content>
-        <Label Text="Hello World" />
-    </ContentPage.Content>
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:touch="http://xamarin.com/schemas/2023/mauicompat/toolkit"
+    x:Name="Page">
+
+    <ContentPage.Resources>
+        <Style x:Key="GridRowContentStyle" TargetType="StackLayout">
+            <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+            <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+            <Setter Property="Spacing" Value="10" />
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <StackLayout Padding="{StaticResource ContentPadding}" Spacing="10">
+
+            <StackLayout Orientation="Horizontal">
+                <Label
+                    FontSize="Title"
+                    HorizontalOptions="FillAndExpand"
+                    Text="NativeAnimationBorderless"
+                    TextColor="Black" />
+                <Switch IsToggled="{Binding NativeAnimationBorderless, Source={x:Reference Page}}" />
+            </StackLayout>
+
+            <Label
+                FontSize="Title"
+                HorizontalOptions="CenterAndExpand"
+                Text="{Binding TouchCount, StringFormat='Touches: {0}', Source={x:Reference Page}}"
+                TextColor="Black" />
+
+            <StackLayout Style="{StaticResource GridRowContentStyle}">
+
+                <Label Text="Scale | Fade | Animated" />
+
+                <StackLayout
+                    touch:TouchEffect.AnimationDuration="250"
+                    touch:TouchEffect.AnimationEasing="{x:Static Easing.CubicInOut}"
+                    touch:TouchEffect.Command="{Binding Command, Source={x:Reference Page}}"
+                    touch:TouchEffect.PressedOpacity="0.6"
+                    touch:TouchEffect.PressedScale="0.8"
+                    HorizontalOptions="CenterAndExpand"
+                    Orientation="Horizontal">
+                    <BoxView Color="Gold" />
+                    <Label Text="The entire layout receives touches" />
+                    <BoxView Color="Gold" />
+                </StackLayout>
+            </StackLayout>
+
+            <StackLayout Style="{StaticResource GridRowContentStyle}">
+
+                <Label Text="Native | Long Press | Hover" />
+
+                <Label
+                    FontSize="Body"
+                    HorizontalOptions="CenterAndExpand"
+                    Text="{Binding LongPressCount, StringFormat='Long press count: {0}', Source={x:Reference Page}}"
+                    TextColor="Black" />
+
+                <StackLayout
+                    Padding="20"
+                    touch:TouchEffect.Command="{Binding Command, Source={x:Reference Page}}"
+                    touch:TouchEffect.HoveredScale="1.2"
+                    touch:TouchEffect.LongPressCommand="{Binding LongPressCommand, Source={x:Reference Page}}"
+                    touch:TouchEffect.NativeAnimation="True"
+                    touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless, Source={x:Reference Page}}"
+                    BackgroundColor="Black"
+                    HorizontalOptions="CenterAndExpand"
+                    Orientation="Horizontal">
+                    <Label
+                        FontSize="Large"
+                        Text="TITLE"
+                        TextColor="White" />
+                </StackLayout>
+            </StackLayout>
+
+            <StackLayout Style="{StaticResource GridRowContentStyle}">
+
+                <Label Text="Color | Rotation | Pulse | Animated" />
+
+                <StackLayout
+                    Padding="20"
+                    touch:TouchEffect.AnimationDuration="500"
+                    touch:TouchEffect.Command="{Binding Command, Source={x:Reference Page}}"
+                    touch:TouchEffect.NormalBackgroundColor="Gold"
+                    touch:TouchEffect.PressedBackgroundColor="Orange"
+                    touch:TouchEffect.PressedRotation="15"
+                    touch:TouchEffect.PulseCount="2"
+                    HorizontalOptions="CenterAndExpand"
+                    Orientation="Horizontal">
+                    <Label
+                        FontSize="Large"
+                        Text="TITLE"
+                        TextColor="White" />
+                </StackLayout>
+            </StackLayout>
+
+            <StackLayout Style="{StaticResource GridRowContentStyle}">
+
+                <Label Text="Button | ImageButton" />
+
+                <Button touch:TouchEffect.Command="{Binding Command, Mode=OneWay, Source={x:Reference Page}}" Text="Button" />
+
+                <ImageButton
+                    touch:TouchEffect.Command="{Binding Command, Mode=OneWay, Source={x:Reference Page}}"
+                    HeightRequest="150"
+                    Source="xamarinstore.jpg" />
+
+            </StackLayout>
+
+            <StackLayout Style="{StaticResource GridRowContentStyle}">
+
+                <Label Text="Nested effect" />
+
+                <ContentView
+                    Padding="50"
+                    touch:TouchEffect.Command="{Binding ParentCommand, Source={x:Reference Page}}"
+                    touch:TouchEffect.NativeAnimation="True"
+                    touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless, Source={x:Reference Page}}"
+                    BackgroundColor="Purple"
+                    HorizontalOptions="CenterAndExpand">
+                    <BoxView
+                        touch:TouchEffect.Command="{Binding ChildCommand, Source={x:Reference Page}}"
+                        touch:TouchEffect.NativeAnimation="True"
+                        touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless, Source={x:Reference Page}}"
+                        HeightRequest="100"
+                        WidthRequest="100"
+                        Color="Gold" />
+                </ContentView>
+            </StackLayout>
+
+        </StackLayout>
+    </ScrollView>
 </ContentPage>
