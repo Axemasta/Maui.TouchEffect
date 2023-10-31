@@ -14,9 +14,6 @@ public static class AppBuilderExtensions
 #if ANDROID
 			effects.Add<TouchEffect, PlatformTouchEffect>();
 #endif
-#if MACOS
-			effects.Add<TouchEffect, PlatformTouchEffect>();
-#endif
 		});
 
 		return builder;
