@@ -482,7 +482,6 @@ public class TouchEffect : RoutingEffect
 	private VisualElement? element;
 
 	public TouchEffect()
-		: base(EffectIds.TouchEffect)
 	{
 		gestureManager = new GestureManager();
 		weakEventManager = new WeakEventManager();
