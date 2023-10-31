@@ -412,7 +412,7 @@ internal sealed class GestureManager
 		var element = sender.Element;
 		if (_defaultBackgroundColor == default)
 		{
-			_defaultBackgroundColor = element.BackgroundColor;
+			_defaultBackgroundColor = element.BackgroundColor ?? normalBackgroundColor;
 		}
 
 		var color = GetBackgroundColor(normalBackgroundColor);

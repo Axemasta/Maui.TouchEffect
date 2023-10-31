@@ -230,8 +230,10 @@ internal sealed class TouchUITapGestureRecognizer : UIGestureRecognizer
 					View.Layer.Opacity = isStarted ? 0.5f : (float) touchEffect.Element.Opacity;
 				}
 				else
-				{
-					View.Layer.BackgroundColor = (isStarted ? color : touchEffect.Element.BackgroundColor).ToCGColor();
+                {
+                    var backgroundColor = touchEffect.Element.BackgroundColor ?? Colors.Transparent;
+                    
+					View.Layer.BackgroundColor = (isStarted ? color : backgroundColor).ToCGColor();
 				}
 
 				View.Layer.CornerRadius = isStarted ? radius : defaultRadius.GetValueOrDefault();

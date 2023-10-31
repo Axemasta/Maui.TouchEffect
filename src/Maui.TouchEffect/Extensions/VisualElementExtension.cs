@@ -5,32 +5,28 @@ namespace Maui.TouchEffect.Extensions;
 /// </summary>
 public static class VisualElementExtension
 {
-	public static Task<bool> ColorTo(this VisualElement element, Color color, uint length = 250u, Easing easing = null)
-	{
-		_ = element ?? throw new ArgumentNullException(nameof(element));
+    public static Task<bool> ColorTo(this VisualElement element, Color color, uint length = 250u, Easing? easing = null)
+    {
+        _ = element ?? throw new ArgumentNullException(nameof(element));
 
-		var animationCompletionSource = new TaskCompletionSource<bool>();
+        var animationCompletionSource = new TaskCompletionSource<bool>();
 
-        var backgroundColor = element.BackgroundColor ?? Colors.Transparent;
+        if (element.BackgroundColor is null)
+        {
+            element.BackgroundColor = color;
+            return Task.FromResult(false);
+        }
 
-		new Animation
-		{
-			{
-				0, 1, new Animation(v => backgroundColor = new Color(Convert.ToSingle(v), backgroundColor.Green, backgroundColor.Blue, backgroundColor.Alpha), backgroundColor.Red, color.Red)
-			},
-			{
-				0, 1, new Animation(v => backgroundColor = new Color(backgroundColor.Red, Convert.ToSingle(v), backgroundColor.Blue, backgroundColor.Alpha), backgroundColor.Green, color.Green)
-			},
-			{
-				0, 1, new Animation(v => backgroundColor = new Color(backgroundColor.Red, backgroundColor.Green, Convert.ToSingle(v), backgroundColor.Alpha), backgroundColor.Blue, color.Blue)
-			},
-			{
-				0, 1, new Animation(v => backgroundColor = new Color(backgroundColor.Red, backgroundColor.Green, backgroundColor.Blue, Convert.ToSingle(v)), backgroundColor.Alpha, color.Alpha)
-			},
-		}.Commit(element, nameof(ColorTo), 16, length, easing, (d, b) => animationCompletionSource.SetResult(true));
+        new Animation
+        {
+            { 0, 1, new Animation(v => element.BackgroundColor = new Color((float)v, element.BackgroundColor.Green, element.BackgroundColor.Blue, element.BackgroundColor.Alpha), element.BackgroundColor.Red, color.Red) },
+            { 0, 1, new Animation(v => element.BackgroundColor = new Color(element.BackgroundColor.Red, (float)v, element.BackgroundColor.Blue, element.BackgroundColor.Alpha), element.BackgroundColor.Green, color.Green) },
+            { 0, 1, new Animation(v => element.BackgroundColor = new Color(element.BackgroundColor.Red, element.BackgroundColor.Green, (float)v, element.BackgroundColor.Alpha), element.BackgroundColor.Blue, color.Blue) },
+            { 0, 1, new Animation(v => element.BackgroundColor = new Color(element.BackgroundColor.Red, element.BackgroundColor.Green, element.BackgroundColor.Blue, (float)v), element.BackgroundColor.Alpha, color.Alpha) },
+        }.Commit(element, nameof(ColorTo), 16, length, easing, (d, b) => animationCompletionSource.SetResult(true));
 
-		return animationCompletionSource.Task;
-	}
+        return animationCompletionSource.Task;
+    }
 
 	public static void AbortAnimations(this VisualElement element, params string[] otherAnimationNames)
 	{

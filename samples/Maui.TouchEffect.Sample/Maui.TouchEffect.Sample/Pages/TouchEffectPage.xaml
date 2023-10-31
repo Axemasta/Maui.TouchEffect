@@ -34,6 +34,16 @@
                 TextColor="Black" />
 
             <StackLayout Style="{StaticResource GridRowContentStyle}">
+                <Label Text="Image | Toggle" />
+                <Image
+                    touch:TouchEffect.Command="{Binding Command, Source={x:Reference Page}}"
+                    touch:TouchEffect.IsToggled="False"
+                    touch:TouchEffect.NormalBackgroundImageSource="button.png"
+                    touch:TouchEffect.PressedBackgroundImageSource="button_pressed.png" />
+
+            </StackLayout>
+
+            <StackLayout Style="{StaticResource GridRowContentStyle}">
 
                 <Label Text="Scale | Fade | Animated" />
 
@@ -103,6 +113,15 @@
                         Text="TITLE"
                         TextColor="White" />
                 </StackLayout>
+            </StackLayout>
+
+            <StackLayout Style="{StaticResource GridRowContentStyle}">
+                <Label Text="Image | Native" />
+                <Image
+                    touch:TouchEffect.Command="{Binding Command, Source={x:Reference Page}}"
+                    touch:TouchEffect.NativeAnimation="True"
+                    touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless, Source={x:Reference Page}}"
+                    Source="button.png" />
             </StackLayout>
 
             <StackLayout Style="{StaticResource GridRowContentStyle}">
