@@ -45,9 +45,15 @@
                     touch:TouchEffect.PressedScale="0.8"
                     HorizontalOptions="CenterAndExpand"
                     Orientation="Horizontal">
-                    <BoxView Color="Gold" />
+                    <BoxView
+                        HeightRequest="20"
+                        WidthRequest="20"
+                        Color="Gold" />
                     <Label Text="The entire layout receives touches" />
-                    <BoxView Color="Gold" />
+                    <BoxView
+                        HeightRequest="20"
+                        WidthRequest="20"
+                        Color="Gold" />
                 </StackLayout>
             </StackLayout>
 
