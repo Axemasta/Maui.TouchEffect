@@ -1,2 +1,2 @@
-[assembly: XmlnsDefinition("http://xamarin.com/schemas/2023/mauicompat/toolkit", "Maui.TouchEffect")]
-[assembly: XmlnsDefinition("http://xamarin.com/schemas/2023/mauicompat/toolkit", "Maui.TouchEffect.Enums")]
+[assembly: XmlnsDefinition("http://axemasta.com/schemas/2023/toucheffect", "Maui.TouchEffect")]
+[assembly: XmlnsDefinition("http://axemasta.com/schemas/2023/toucheffect", "Maui.TouchEffect.Enums")]
