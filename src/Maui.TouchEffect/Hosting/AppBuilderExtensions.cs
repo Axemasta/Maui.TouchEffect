@@ -8,6 +8,8 @@ public static class AppBuilderExtensions
 	{
 		builder.ConfigureEffects(effects =>
 		{
+            // Implemented only on iOS & Android
+            // Partial touch effect really did not want to work.... a partial behavior did work
 #if IOS
 			effects.Add<TouchEffect, PlatformTouchEffect>();
 #endif
