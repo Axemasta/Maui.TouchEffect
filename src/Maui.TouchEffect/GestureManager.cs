@@ -402,9 +402,9 @@ internal sealed class GestureManager
 		var hoveredBackgroundColor = sender.HoveredBackgroundColor;
 
 		if (sender.Element == null
-			|| normalBackgroundColor == Colors.Transparent
-			&& pressedBackgroundColor == Colors.Transparent
-			&& hoveredBackgroundColor == Colors.Transparent)
+			|| normalBackgroundColor is null
+			&& pressedBackgroundColor is null
+			&& hoveredBackgroundColor is null)
 		{
 			return Task.FromResult(false);
 		}
@@ -679,9 +679,9 @@ internal sealed class GestureManager
 		return element?.RotateYTo(rotationY, (uint)Abs(duration), easing) ?? Task.FromResult(false);
 	}
 
-	private Color? GetBackgroundColor(Color color)
+	private Color? GetBackgroundColor(Color? color)
 	{
-		return color != Colors.Transparent
+		return color != KnownColor.Default
 			? color
 			: _defaultBackgroundColor;
 	}

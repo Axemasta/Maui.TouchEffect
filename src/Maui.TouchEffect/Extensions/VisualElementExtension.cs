@@ -5,11 +5,16 @@ namespace Maui.TouchEffect.Extensions;
 /// </summary>
 public static class VisualElementExtension
 {
-    public static Task<bool> ColorTo(this VisualElement element, Color color, uint length = 250u, Easing? easing = null)
+    public static Task<bool> ColorTo(this VisualElement element, Color? color, uint length = 250u, Easing? easing = null)
     {
         _ = element ?? throw new ArgumentNullException(nameof(element));
 
         var animationCompletionSource = new TaskCompletionSource<bool>();
+
+        if (color is null)
+        {
+            return Task.FromResult(false);
+        }
 
         if (element.BackgroundColor is null)
         {

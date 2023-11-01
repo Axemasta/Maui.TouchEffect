@@ -142,21 +142,21 @@ public class TouchEffect : RoutingEffect
 		nameof(NormalBackgroundColor),
 		typeof(Color),
 		typeof(TouchEffect),
-		Colors.Transparent,
+		KnownColor.Default,
 		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 	public readonly static BindableProperty HoveredBackgroundColorProperty = BindableProperty.CreateAttached(
 		nameof(HoveredBackgroundColor),
 		typeof(Color),
 		typeof(TouchEffect),
-		Colors.Transparent,
+        KnownColor.Default,
 		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 	public readonly static BindableProperty PressedBackgroundColorProperty = BindableProperty.CreateAttached(
 		nameof(PressedBackgroundColor),
 		typeof(Color),
 		typeof(TouchEffect),
-		Colors.Transparent,
+        KnownColor.Default,
 		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
 	public readonly static BindableProperty NormalOpacityProperty = BindableProperty.CreateAttached(
@@ -395,7 +395,7 @@ public class TouchEffect : RoutingEffect
 		nameof(NativeAnimationColor),
 		typeof(Color),
 		typeof(TouchEffect),
-		Colors.Transparent,
+        KnownColor.Default,
 		propertyChanged: TryGenerateEffect);
 
 	public readonly static BindableProperty NativeAnimationRadiusProperty = BindableProperty.CreateAttached(
@@ -627,19 +627,19 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(HoverStateProperty, value);
 	}
 
-	public static Color GetNormalBackgroundColor(BindableObject? bindable)
-	{
-		return (Color)(bindable?.GetValue(NormalBackgroundColorProperty) ?? throw new ArgumentNullException(nameof(bindable)));
-	}
+	public static Color? GetNormalBackgroundColor(BindableObject? bindable)
+    {
+        return bindable?.GetValue(NormalBackgroundColorProperty) as Color;
+    }
 
 	public static void SetNormalBackgroundColor(BindableObject? bindable, Color value)
 	{
 		bindable?.SetValue(NormalBackgroundColorProperty, value);
 	}
 
-	public static Color GetHoveredBackgroundColor(BindableObject? bindable)
+	public static Color? GetHoveredBackgroundColor(BindableObject? bindable)
 	{
-		return (Color)(bindable?.GetValue(HoveredBackgroundColorProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+        return bindable?.GetValue(HoveredBackgroundColorProperty) as Color;
 	}
 
 	public static void SetHoveredBackgroundColor(BindableObject? bindable, Color value)
@@ -647,9 +647,9 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(HoveredBackgroundColorProperty, value);
 	}
 
-	public static Color GetPressedBackgroundColor(BindableObject? bindable)
+	public static Color? GetPressedBackgroundColor(BindableObject? bindable)
 	{
-		return (Color)(bindable?.GetValue(PressedBackgroundColorProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+        return bindable?.GetValue(PressedBackgroundColorProperty) as Color;
 	}
 
 	public static void SetPressedBackgroundColor(BindableObject? bindable, Color value)
@@ -1012,10 +1012,10 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(NativeAnimationProperty, value);
 	}
 
-	public static Color GetNativeAnimationColor(BindableObject? bindable)
-	{
-		return (Color)(bindable?.GetValue(NativeAnimationColorProperty) ?? throw new ArgumentNullException(nameof(bindable)));
-	}
+	public static Color? GetNativeAnimationColor(BindableObject? bindable)
+    {
+        return bindable?.GetValue(NativeAnimationColorProperty) as Color;
+    }
 
 	public static void SetNativeAnimationColor(BindableObject? bindable, Color value)
 	{
@@ -1232,7 +1232,7 @@ public class TouchEffect : RoutingEffect
 
 	public bool NativeAnimation => GetNativeAnimation(Element);
 
-	public Color NativeAnimationColor => GetNativeAnimationColor(Element);
+	public Color? NativeAnimationColor => GetNativeAnimationColor(Element);
 
 	public int NativeAnimationRadius => GetNativeAnimationRadius(Element);
 
@@ -1240,11 +1240,11 @@ public class TouchEffect : RoutingEffect
 
 	public bool NativeAnimationBorderless => GetNativeAnimationBorderless(Element);
 
-	public Color NormalBackgroundColor => GetNormalBackgroundColor(Element);
+	public Color? NormalBackgroundColor => GetNormalBackgroundColor(Element);
 
-	public Color HoveredBackgroundColor => GetHoveredBackgroundColor(Element);
+	public Color? HoveredBackgroundColor => GetHoveredBackgroundColor(Element);
 
-	public Color PressedBackgroundColor => GetPressedBackgroundColor(Element);
+	public Color? PressedBackgroundColor => GetPressedBackgroundColor(Element);
 
 	public double NormalOpacity => GetNormalOpacity(Element);
 

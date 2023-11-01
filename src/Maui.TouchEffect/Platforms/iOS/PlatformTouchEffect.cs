@@ -225,7 +225,7 @@ internal sealed class TouchUITapGestureRecognizer : UIGestureRecognizer
 		UIViewPropertyAnimator.CreateRunningPropertyAnimator(.2, 0, UIViewAnimationOptions.AllowUserInteraction,
 			() =>
 			{
-				if (color == default(Color))
+				if (color is null)
 				{
 					View.Layer.Opacity = isStarted ? 0.5f : (float) touchEffect.Element.Opacity;
 				}
