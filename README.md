@@ -3,6 +3,18 @@ Maui port of TouchEffect from Xamarin Community Toolkit
 
 > The aim of this library is to provide temporary support for the touch effect without having to take a dependency on [XCT's MauiCompat](https://devblogs.microsoft.com/xamarin/introducing-net-maui-compatibility-for-the-xamarin-community-toolkit/) library. My results of using the compat library have been extremely tempramental, alot of the times the touch effect does not work and due to the packages target framework (net6) & age (2 years old) I figured a new port would be the best option. When [CommunityToolkit.Maui](https://github.com/CommunityToolkit/Maui) eventually releases this feature I will archive this repository.
 
+This library supports the following platforms:
+
+| Platform     | Supported |
+| ------------ | --------- |
+| iOS          | ✅         |
+| Android      | ✅         |
+| Mac Catalyst | ❌         |
+| Windows      | ❌         |
+| Tizen        | ❌         |
+
+Due to the temporary nature of this library, I will not be adding support for any platforms I do not personally need. I am open to PR's but MCT are aiming for a NET8 release of TouchEffect so this library will only be kicking around for a matter of weeks/months.
+
 ## Install
 
 - Install Maui.TouchEffect package
