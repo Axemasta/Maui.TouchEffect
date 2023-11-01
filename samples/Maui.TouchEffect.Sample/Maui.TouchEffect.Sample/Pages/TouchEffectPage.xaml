@@ -15,6 +15,10 @@
         </Style>
     </ContentPage.Resources>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Binding TouchCount, StringFormat='Touches: {0}', Source={x:Reference Page}}" />
+    </ContentPage.ToolbarItems>
+
     <ScrollView>
         <StackLayout Padding="{StaticResource ContentPadding}" Spacing="10">
 
