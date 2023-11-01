@@ -38,6 +38,8 @@ Due to the temporary nature of this library, I will not be adding support for an
 
 See the samples app from this project, it is a port of the `TouchEffectPage` from the XCT samples app.
 
+<img src="assets/Sample_Demonstration.gif" alt="Sample app included with this project" width="500">
+
 Declare xmlns:
 
 ```xml
