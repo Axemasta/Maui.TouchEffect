@@ -73,11 +73,11 @@ Use the same API as XCT:
 
 See[`TouchEffect Class`](https://learn.microsoft.com/en-us/dotnet/api/xamarin.communitytoolkit.effects.toucheffect?view=xamarin-community-toolkit-sdk) for complete api documentation.
 
+I added a reproduction to hunt an issue i was experiencing on iOS when using in conjunction with the sharpnado collection view. Turns out sharpnado was nothing to do with it and the input transparency was not being set when using a `Border` with a nested `Layout`. Below is the collection view page demonstrating the touch effect on a repeater view.
 
-
-| iOS  | Android                                                      |
-| ---- | ------------------------------------------------------------ |
-|      | ![Touch effect on sharpnado collectionview](assets/touch-effect-android.gif) |
+| iOS                                                          | Android                                                      |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| ![Touch effect on sharpnado collectionview on ios](assets/touch-effect-ios.gif) | ![Touch effect on sharpnado collectionview on android](assets/touch-effect-android.gif) |
 
 ## Acknowlegements
 
