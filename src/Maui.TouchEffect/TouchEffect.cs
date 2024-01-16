@@ -1493,27 +1493,38 @@ public class TouchEffect : RoutingEffect
 		gestureManager.HandleLongPress(this);
 	}
 
+    private void SetChildrenInputTransparent(bool value, Layout layout)
+    {
+        layout.ChildAdded -= OnLayoutChildAdded;
+
+        if (!value)
+        {
+            return;
+        }
+
+        layout.InputTransparent = false;
+        foreach (var view in layout.Children)
+        {
+            OnLayoutChildAdded(layout, new ElementEventArgs((Element)view));
+        }
+
+        layout.ChildAdded += OnLayoutChildAdded;
+    }
+    
 	private void SetChildrenInputTransparent(bool value)
 	{
 		if (Element is not Layout layout)
 		{
+            if (Element is IContentView { Content: Layout childLayout })
+            {
+                // Super bodge but we move, this looks like it will be an issue in the current toolkit implementation
+                SetChildrenInputTransparent(value, childLayout);
+            }
+            
 			return;
 		}
 
-		layout.ChildAdded -= OnLayoutChildAdded;
-
-		if (!value)
-		{
-			return;
-		}
-
-		layout.InputTransparent = false;
-		foreach (var view in layout.Children)
-		{
-			OnLayoutChildAdded(layout, new ElementEventArgs((Element)view));
-		}
-
-		layout.ChildAdded += OnLayoutChildAdded;
+		SetChildrenInputTransparent(value, layout);
 	}
 
 	private void OnLayoutChildAdded(object? sender, ElementEventArgs e)
