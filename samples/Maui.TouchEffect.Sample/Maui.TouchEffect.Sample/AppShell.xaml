@@ -4,12 +4,17 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:pages="clr-namespace:Maui.TouchEffect.Sample.Pages"
-    Shell.FlyoutBehavior="Disabled"
+    Shell.FlyoutBehavior="Flyout"
     Title="Maui.TouchEffect.Sample">
 
     <ShellContent
         ContentTemplate="{DataTemplate pages:TouchEffectPage}"
         Route="TouchEffectPage"
         Title="Touch Effect" />
+
+    <ShellContent
+        ContentTemplate="{DataTemplate pages:SharpnadoPage}"
+        Route="SharpnadoPage"
+        Title="Sharpnado Page" />
 
 </Shell>

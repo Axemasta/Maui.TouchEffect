@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="Maui.TouchEffect.Sample.Pages.SharpnadoPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sharpnado="http://sharpnado.com"
+    xmlns:viewmodels="clr-namespace:Maui.TouchEffect.Sample.ViewModels"
+    x:DataType="viewmodels:ItemsViewModel"
+    BackgroundColor="#F0F0F0">
+
+    <ContentPage.Resources>
+        <DataTemplate x:Key="DisplayItemCard" x:DataType="viewmodels:DisplayItem">
+            <sharpnado:DraggableViewCell>
+                <ContentView>
+                    <Border
+                        Padding="20,10"
+                        BackgroundColor="White"
+                        StrokeShape="RoundRectangle, 10"
+                        StrokeThickness="0">
+                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                            <Ellipse
+                                BackgroundColor="{Binding Color}"
+                                HeightRequest="40"
+                                WidthRequest="40" />
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                <Label FontSize="20" Text="{Binding Title}" />
+                                <Label FontSize="12" Text="{Binding SubTitle}" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </ContentView>
+            </sharpnado:DraggableViewCell>
+        </DataTemplate>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <sharpnado:CollectionView
+            CollectionPadding="10"
+            ItemHeight="150"
+            ItemSpacing="10"
+            ItemTemplate="{StaticResource DisplayItemCard}"
+            ItemsSource="{Binding Items}" />
+    </ContentPage.Content>
+</ContentPage>

@@ -1,7 +1,10 @@
 ﻿using Maui.TouchEffect.Hosting;
 using Maui.TouchEffect.Sample.Pages;
+using Maui.TouchEffect.Sample.ViewModels;
 
 using Microsoft.Extensions.Logging;
+
+using Sharpnado.CollectionView;
 
 namespace Maui.TouchEffect.Sample;
 
@@ -13,6 +16,7 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .UseMauiTouchEffect()
+            .UseSharpnadoCollectionView(true)
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -24,6 +28,8 @@ public static class MauiProgram
 #endif
 
         builder.Services.AddTransient<TouchEffectPage>();
+        builder.Services.AddTransient<SharpnadoPage>();
+        builder.Services.AddTransient<ItemsViewModel>();
 
         return builder.Build();
     }
