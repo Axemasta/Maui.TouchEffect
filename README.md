@@ -75,6 +75,10 @@ See[`TouchEffect Class`](https://learn.microsoft.com/en-us/dotnet/api/xamarin.co
 
 
 
+| iOS  | Android                                                      |
+| ---- | ------------------------------------------------------------ |
+|      | ![Touch effect on sharpnado collectionview](assets/touch-effect-android.gif) |
+
 ## Acknowlegements
 
 This code is ported from:
