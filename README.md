@@ -1,4 +1,7 @@
-# Maui.TouchEffect
+# This repository has been archived due to the feature being implemented & merged to the [Maui.CommunityToolkit](https://github.com/CommunityToolkit/Maui/pull/1673) project, please use the `TouchBehavior` in the toolkit instead.
+
+# Maui.TouchEffect (Archived)
+
 Maui port of TouchEffect from Xamarin Community Toolkit
 
 > The aim of this library is to provide temporary support for the touch effect without having to take a dependency on [XCT's MauiCompat](https://devblogs.microsoft.com/xamarin/introducing-net-maui-compatibility-for-the-xamarin-community-toolkit/) library. My results of using the compat library have been extremely tempramental, alot of the times the touch effect does not work and due to the packages target framework (net6) & age (2 years old) I figured a new port would be the best option. When [CommunityToolkit.Maui](https://github.com/CommunityToolkit/Maui) eventually releases this feature I will archive this repository.
