@@ -1,4 +1,5 @@
-# This repository has been archived due to the feature being implemented & merged to the [Maui.CommunityToolkit](https://github.com/CommunityToolkit/Maui/pull/1673) project, please use the `TouchBehavior` in the toolkit instead.
+# This repository is being unarchived and updated to target .NET 9 due to a number of breaking changed over in maui which render `TouchBehavior` not fit for use. I will offer the code back to MCT but for the time being this is the fastest way to port apps from .NET 8 to 9!
+# (old) This repository has been archived due to the feature being implemented & merged to the [Maui.CommunityToolkit](https://github.com/CommunityToolkit/Maui/pull/1673) project, please use the `TouchBehavior` in the toolkit instead.
 
 # Maui.TouchEffect (Archived)
 
