@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="Maui.TouchEffect.Sample.Views.GameDeveloperDisplayCard"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:Maui.TouchEffect.Sample.Models"
+    xmlns:touch="http://axemasta.com/schemas/2023/toucheffect"
+    xmlns:viewmodels="clr-namespace:Maui.TouchEffect.Sample.ViewModels"
+    x:DataType="models:GameDeveloperDisplayItem">
+    <ContentView.Content>
+        <Border
+            Padding="20,10"
+            touch:TouchEffect.AnimationDuration="150"
+            touch:TouchEffect.AnimationEasing="{x:Static Easing.CubicInOut}"
+            touch:TouchEffect.Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:GameDevelopersViewModel}}, Path=DeveloperSelectedCommand}"
+            touch:TouchEffect.CommandParameter="{Binding .}"
+            touch:TouchEffect.NormalBackgroundColor="{AppThemeBinding Light={StaticResource White},
+                                                                      Dark={StaticResource Black}}"
+            touch:TouchEffect.PressedBackgroundColor="{AppThemeBinding Light=LightGrey,
+                                                                       Dark={StaticResource Gray600}}"
+            touch:TouchEffect.PressedOpacity="0.8"
+            touch:TouchEffect.PressedScale="0.9"
+            touch:TouchEffect.ShouldMakeChildrenInputTransparent="True"
+            StrokeShape="RoundRectangle, 10"
+            StrokeThickness="0">
+            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="10">
+                <Ellipse
+                    BackgroundColor="{Binding Color}"
+                    HeightRequest="40"
+                    WidthRequest="40" />
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                    <Label FontSize="20" Text="{Binding Title}" />
+                    <Label FontSize="12" Text="{Binding SubTitle}" />
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+    </ContentView.Content>
+</ContentView>

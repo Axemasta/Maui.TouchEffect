@@ -379,7 +379,7 @@
 
     <Style ApplyToDerivedTypes="True" TargetType="Page">
         <Setter Property="Padding" Value="0" />
-        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource AppBackgroundColor}, Dark={StaticResource Black}}" />
     </Style>
 
     <Style ApplyToDerivedTypes="True" TargetType="Shell">
@@ -409,7 +409,7 @@
     </Style>
 
     <Style ApplyToDerivedTypes="True" TargetType="ContentPage">
-        <Setter Property="BackgroundColor" Value="{StaticResource AppBackgroundColor}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource AppBackgroundColor}, Dark={StaticResource Gray950}}" />
         <Setter Property="ios:Page.UseSafeArea" Value="False" />
         <Setter Property="NavigationPage.BackButtonTitle" Value="" />
     </Style>

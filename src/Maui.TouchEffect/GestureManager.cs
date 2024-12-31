@@ -7,15 +7,18 @@ namespace Maui.TouchEffect;
 internal sealed class GestureManager
 {
 	private const int _animationProgressDelay = 10;
-	private Color? _defaultBackgroundColor;
-	private CancellationTokenSource? _longPressTokenSource;
+#pragma warning disable IDE1006 // Naming Styles
+    private Color? _defaultBackgroundColor;
+
+    private CancellationTokenSource? _longPressTokenSource;
 	private CancellationTokenSource? _animationTokenSource;
 	private Func<TouchEffect, TouchState, HoverState, int, Easing, CancellationToken, Task>? _animationTaskFactory;
 	private double? _durationMultiplier;
 	private double _animationProgress;
 	private TouchState? _animationState;
+#pragma warning restore IDE1006 // Naming Styles
 
-	internal void HandleTouch(TouchEffect sender, TouchStatus status)
+    internal void HandleTouch(TouchEffect sender, TouchStatus status)
 	{
 		if (sender.IsDisabled)
 		{

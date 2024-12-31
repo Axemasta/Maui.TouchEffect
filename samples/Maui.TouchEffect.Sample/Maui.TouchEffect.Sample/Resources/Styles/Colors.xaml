@@ -40,7 +40,7 @@
     <Color x:Key="Blue300Accent">#A7CBF6</Color>
 
     <!--  Colors  -->
-    <Color x:Key="AppBackgroundColor">#FAFAFA</Color>
+    <Color x:Key="AppBackgroundColor">#F0F0F0</Color>
     <Color x:Key="PrimaryColor">#FAFAFA</Color>
     <Color x:Key="NavigationBarTextColor">#5D5D5D</Color>
     <Color x:Key="NormalButtonBackgroundColor">#1976D2</Color>

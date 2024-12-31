@@ -1,4 +1,7 @@
-﻿using System.Windows.Input;
+﻿using System.ComponentModel;
+using System.Windows.Input;
+
+using Maui.TouchEffect.Converters;
 using Maui.TouchEffect.Enums;
 using MauiTouchEffect.Extensions;
 // ReSharper disable MemberCanBePrivate.Global
@@ -98,9 +101,9 @@ public class TouchEffect : RoutingEffect
 
 	public readonly static BindableProperty LongPressDurationProperty = BindableProperty.CreateAttached(
 		nameof(LongPressDuration),
-		typeof(int),
+		typeof(TimeSpan),
 		typeof(TouchEffect),
-		500,
+		TimeSpan.FromSeconds(0.5),
 		propertyChanged: TryGenerateEffect);
 
 	public readonly static BindableProperty StatusProperty = BindableProperty.CreateAttached(
@@ -567,12 +570,14 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(LongPressCommandParameterProperty, value);
 	}
 
-	public static int GetLongPressDuration(BindableObject? bindable)
+    [TypeConverter(typeof(TimeSpanMillisecondTypeConverter))]
+    public static TimeSpan GetLongPressDuration(BindableObject? bindable)
 	{
-		return (int)(bindable?.GetValue(LongPressDurationProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+		return (TimeSpan)(bindable?.GetValue(LongPressDurationProperty) ?? throw new ArgumentNullException(nameof(bindable)));
 	}
 
-	public static void SetLongPressDuration(BindableObject? bindable, int value)
+    [TypeConverter(typeof(TimeSpanMillisecondTypeConverter))]
+    public static void SetLongPressDuration(BindableObject? bindable, int value)
 	{
 		bindable?.SetValue(LongPressDurationProperty, value);
 	}
@@ -1196,7 +1201,7 @@ public class TouchEffect : RoutingEffect
 
 	public object? LongPressCommandParameter => GetLongPressCommandParameter(Element);
 
-	public int LongPressDuration => GetLongPressDuration(Element);
+	public TimeSpan LongPressDuration => GetLongPressDuration(Element);
 
 	public TouchStatus Status
 	{

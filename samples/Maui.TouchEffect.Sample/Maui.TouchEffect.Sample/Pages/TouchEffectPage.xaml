@@ -5,7 +5,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:touch="http://axemasta.com/schemas/2023/toucheffect"
-    x:Name="Page">
+    xmlns:viewmodels="clr-namespace:Maui.TouchEffect.Sample.ViewModels"
+    x:DataType="viewmodels:TouchEffectViewModel">
 
     <ContentPage.Resources>
         <Style x:Key="GridRowContentStyle" TargetType="StackLayout">
@@ -16,7 +17,7 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{Binding TouchCount, StringFormat='Touches: {0}', Source={x:Reference Page}}" />
+        <ToolbarItem Text="{Binding TouchCount, StringFormat='Touches: {0}'}" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -26,26 +27,14 @@
                 <Label
                     FontSize="Title"
                     HorizontalOptions="FillAndExpand"
-                    Text="NativeAnimationBorderless"
-                    TextColor="Black" />
-                <Switch IsToggled="{Binding NativeAnimationBorderless, Source={x:Reference Page}}" />
+                    Text="NativeAnimationBorderless" />
+                <Switch IsToggled="{Binding NativeAnimationBorderless}" />
             </StackLayout>
 
             <Label
                 FontSize="Title"
                 HorizontalOptions="CenterAndExpand"
-                Text="{Binding TouchCount, StringFormat='Touches: {0}', Source={x:Reference Page}}"
-                TextColor="Black" />
-
-            <StackLayout Style="{StaticResource GridRowContentStyle}">
-                <Label Text="Image | Toggle" />
-                <Image
-                    touch:TouchEffect.Command="{Binding Command, Source={x:Reference Page}}"
-                    touch:TouchEffect.IsToggled="False"
-                    touch:TouchEffect.NormalBackgroundImageSource="button.png"
-                    touch:TouchEffect.PressedBackgroundImageSource="button_pressed.png" />
-
-            </StackLayout>
+                Text="{Binding TouchCount, StringFormat='Touches: {0}'}" />
 
             <StackLayout Style="{StaticResource GridRowContentStyle}">
 
@@ -54,7 +43,7 @@
                 <StackLayout
                     touch:TouchEffect.AnimationDuration="250"
                     touch:TouchEffect.AnimationEasing="{x:Static Easing.CubicInOut}"
-                    touch:TouchEffect.Command="{Binding Command, Source={x:Reference Page}}"
+                    touch:TouchEffect.Command="{Binding TouchCommand}"
                     touch:TouchEffect.PressedOpacity="0.6"
                     touch:TouchEffect.PressedScale="0.8"
                     HorizontalOptions="CenterAndExpand"
@@ -78,16 +67,16 @@
                 <Label
                     FontSize="Body"
                     HorizontalOptions="CenterAndExpand"
-                    Text="{Binding LongPressCount, StringFormat='Long press count: {0}', Source={x:Reference Page}}"
-                    TextColor="Black" />
+                    Text="{Binding LongPressCount, StringFormat='Long press count: {0}'}" />
 
                 <StackLayout
                     Padding="20"
-                    touch:TouchEffect.Command="{Binding Command, Source={x:Reference Page}}"
+                    touch:TouchEffect.Command="{Binding TouchCommand}"
                     touch:TouchEffect.HoveredScale="1.2"
-                    touch:TouchEffect.LongPressCommand="{Binding LongPressCommand, Source={x:Reference Page}}"
+                    touch:TouchEffect.LongPressCommand="{Binding LongPressCommand}"
+                    touch:TouchEffect.LongPressDuration="3000"
                     touch:TouchEffect.NativeAnimation="True"
-                    touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless, Source={x:Reference Page}}"
+                    touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless}"
                     BackgroundColor="Black"
                     HorizontalOptions="CenterAndExpand"
                     Orientation="Horizontal">
@@ -105,7 +94,7 @@
                 <StackLayout
                     Padding="20"
                     touch:TouchEffect.AnimationDuration="500"
-                    touch:TouchEffect.Command="{Binding Command, Source={x:Reference Page}}"
+                    touch:TouchEffect.Command="{Binding TouchCommand}"
                     touch:TouchEffect.NormalBackgroundColor="Gold"
                     touch:TouchEffect.PressedBackgroundColor="Orange"
                     touch:TouchEffect.PressedRotation="15"
@@ -119,23 +108,16 @@
                 </StackLayout>
             </StackLayout>
 
-            <StackLayout Style="{StaticResource GridRowContentStyle}">
-                <Label Text="Image | Native" />
-                <Image
-                    touch:TouchEffect.Command="{Binding Command, Source={x:Reference Page}}"
-                    touch:TouchEffect.NativeAnimation="True"
-                    touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless, Source={x:Reference Page}}"
-                    Source="button.png" />
-            </StackLayout>
+
 
             <StackLayout Style="{StaticResource GridRowContentStyle}">
 
                 <Label Text="Button | ImageButton" />
 
-                <Button touch:TouchEffect.Command="{Binding Command, Mode=OneWay, Source={x:Reference Page}}" Text="Button" />
+                <Button touch:TouchEffect.Command="{Binding TouchCommand}" Text="Button" />
 
                 <ImageButton
-                    touch:TouchEffect.Command="{Binding Command, Mode=OneWay, Source={x:Reference Page}}"
+                    touch:TouchEffect.Command="{Binding TouchCommand}"
                     HeightRequest="150"
                     Source="xamarinstore.jpg" />
 
@@ -147,15 +129,15 @@
 
                 <ContentView
                     Padding="50"
-                    touch:TouchEffect.Command="{Binding ParentCommand, Source={x:Reference Page}}"
+                    touch:TouchEffect.Command="{Binding ParentPressedCommand}"
                     touch:TouchEffect.NativeAnimation="True"
-                    touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless, Source={x:Reference Page}}"
+                    touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless}"
                     BackgroundColor="Purple"
                     HorizontalOptions="CenterAndExpand">
                     <BoxView
-                        touch:TouchEffect.Command="{Binding ChildCommand, Source={x:Reference Page}}"
+                        touch:TouchEffect.Command="{Binding ChildPressedCommand}"
                         touch:TouchEffect.NativeAnimation="True"
-                        touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless, Source={x:Reference Page}}"
+                        touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless}"
                         HeightRequest="100"
                         WidthRequest="100"
                         Color="Gold" />

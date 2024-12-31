@@ -28,8 +28,10 @@ public static class MauiProgram
 #endif
 
         builder.Services.AddTransient<TouchEffectPage>();
-        builder.Services.AddTransient<SharpnadoPage>();
-        builder.Services.AddTransient<ItemsViewModel>();
+        builder.Services.AddTransient<CollectionPage>();
+        builder.Services.AddTransient<ImagePage>();
+        builder.Services.AddTransient<GameDevelopersViewModel>();
+        builder.Services.AddTransient<TouchEffectViewModel>();
 
         return builder.Build();
     }
