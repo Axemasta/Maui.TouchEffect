@@ -20,7 +20,7 @@
         <ApplicationTitle>Maui.TouchEffect.Sample</ApplicationTitle>
 
         <!-- App Identifier -->
-        <ApplicationId>com.companyname.maui.toucheffect.sample</ApplicationId>
+        <ApplicationId>com.axemasta.toucheffectsample</ApplicationId>
 
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -62,18 +62,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\src\Maui.TouchEffect\Maui.TouchEffect.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <MauiXaml Update="Pages\CollectionPage.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </MauiXaml>
-      <MauiXaml Update="Pages\ImagePage.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </MauiXaml>
-      <MauiXaml Update="Views\GameDeveloperDisplayCard.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </MauiXaml>
     </ItemGroup>
 
     <!-- Build Properties must be defined within these property groups to ensure successful publishing
