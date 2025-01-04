@@ -22,6 +22,14 @@
 
     <VerticalStackLayout>
 
+        <StackLayout Orientation="Horizontal">
+            <Label
+                FontSize="Title"
+                HorizontalOptions="FillAndExpand"
+                Text="NativeAnimationBorderless" />
+            <Switch IsToggled="{Binding NativeAnimationBorderless}" />
+        </StackLayout>
+
         <VerticalStackLayout Style="{StaticResource GridRowContentStyle}">
             <Label Text="Image | Toggle" />
             <Image
