@@ -29,11 +29,11 @@ public partial class PlatformTouchEffect : PlatformEffect
 
         touchGesture = new TouchUITapGestureRecognizer(effect);
 
-        if (((View as IVisualNativeElementRenderer)?.Control ?? View) is UIButton button)
-        {
-            button.AllTouchEvents += PreventButtonHighlight;
-            ((TouchUITapGestureRecognizer)touchGesture).IsButton = true;
-        }
+        //if (((View as IVisualNativeElementRenderer)?.Control ?? View) is UIButton button)
+        //{
+        //    button.AllTouchEvents += PreventButtonHighlight;
+        //    ((TouchUITapGestureRecognizer)touchGesture).IsButton = true;
+        //}
 
         View.AddGestureRecognizer(touchGesture);
 

@@ -12,6 +12,7 @@ using Color = Android.Graphics.Color;
 using Mview = Microsoft.Maui.Controls.View;
 using Mcolor = Microsoft.Maui.Graphics.Color;
 using Maui.TouchEffect.Enums;
+using Microsoft.Maui.Platform;
 
 namespace Maui.TouchEffect;
 
@@ -27,8 +28,10 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
     AView? rippleView;
     float startX;
     float startY;
+#pragma warning disable IDE1006
     Mcolor? _rippleColor;
     int _rippleRadius = -1;
+#pragma warning restore IDE1006
 
     AView _view => Control ?? Container;
 
@@ -382,16 +385,16 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
 
         return new ColorStateList(
             new[] { new int[] { } },
-            new[] { (int)nativeAnimationColor.ToAndroid() });
+            new[] { (int)nativeAnimationColor.ToPlatform() });
     }
 
     void OnLayoutChange(object sender, AView.LayoutChangeEventArgs e)
     {
-        if (sender is not AView view || (_group as IVisualElementRenderer)?.Element == null || rippleView == null)
-            return;
+        //if (sender is not AView view || (_group as IVisualElementRenderer)?.Element == null || rippleView == null)
+        //    return;
 
-        rippleView.Right = view.Width;
-        rippleView.Bottom = view.Height;
+        //rippleView.Right = view.Width;
+        //rippleView.Bottom = view.Height;
     }
 
     sealed class AccessibilityListener : Java.Lang.Object,

@@ -12,7 +12,7 @@
             Padding="20,10"
             touch:TouchEffect.AnimationDuration="150"
             touch:TouchEffect.AnimationEasing="{x:Static Easing.CubicInOut}"
-            touch:TouchEffect.Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:GameDevelopersViewModel}}, Path=DeveloperSelectedCommand}"
+            touch:TouchEffect.Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:GameDevelopersViewModel}}, Path=DeveloperSelectedCommand, x:DataType=viewmodels:GameDevelopersViewModel}"
             touch:TouchEffect.CommandParameter="{Binding .}"
             touch:TouchEffect.DefaultBackgroundColor="{AppThemeBinding Light={StaticResource White},
                                                                        Dark={StaticResource Black}}"

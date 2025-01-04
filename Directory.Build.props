@@ -7,9 +7,9 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <MauiVersion>8.0.100</MauiVersion>
+        <MauiVersion>9.0.21</MauiVersion>
 
-        <NetVersion>8</NetVersion>
+        <NetVersion>9</NetVersion>
 
         <IosTargetFramework>net$(NetVersion).0-ios</IosTargetFramework>
         <AndroidTargetFramework>net$(NetVersion).0-android</AndroidTargetFramework>
