@@ -284,7 +284,7 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
 			button.SendClicked();
 		}
 
-		sender.RaiseCompleted();
+		sender.RaiseGestureCompleted();
 	}
 
 	private static void HandleCollectionViewSelection(TouchEffect sender)
@@ -336,12 +336,12 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
 	private static void UpdateStatusAndState(TouchEffect sender, TouchStatus status, TouchState state)
 	{
 		sender.CurrentTouchStatus = status;
-		sender.RaiseStatusChanged();
+		sender.RaiseCurrentTouchStatusChanged();
 
 		if (sender.CurrentTouchState != state || status != TouchStatus.Canceled)
 		{
 			sender.CurrentTouchState = state;
-			sender.RaiseStateChanged();
+			sender.RaiseCurrentTouchStateChanged();
 		}
 	}
 
