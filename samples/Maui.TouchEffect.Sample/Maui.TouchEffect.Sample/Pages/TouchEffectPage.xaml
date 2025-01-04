@@ -95,7 +95,7 @@
                     Padding="20"
                     touch:TouchEffect.AnimationDuration="500"
                     touch:TouchEffect.Command="{Binding TouchCommand}"
-                    touch:TouchEffect.NormalBackgroundColor="Gold"
+                    touch:TouchEffect.DefaultBackgroundColor="Gold"
                     touch:TouchEffect.PressedBackgroundColor="Orange"
                     touch:TouchEffect.PressedRotation="15"
                     touch:TouchEffect.PulseCount="2"

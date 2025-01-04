@@ -9,13 +9,22 @@ namespace Maui.TouchEffect;
 
 public class TouchEffect : RoutingEffect
 {
-	public const string UnpressedVisualState = "Unpressed";
+    /// <summary>
+    /// The visual state for when the <see cref="TouchState"/> is <see cref="TouchState.Default"/>.
+    /// </summary>
+    public const string UnpressedVisualState = "Unpressed";
 
-	public const string PressedVisualState = "Pressed";
+    /// <summary>
+    /// The visual state for when the <see cref="TouchState"/> is <see cref="TouchState.Pressed"/>.
+    /// </summary>
+    public const string PressedVisualState = "Pressed";
 
-	public const string HoveredVisualState = "Hovered";
+    /// <summary>
+    /// The visual state for when the <see cref="HoverState"/> is <see cref="HoverState.Hovered"/>.
+    /// </summary>
+    public const string HoveredVisualState = "Hovered";
 
-	public event EventHandler<TouchStatusChangedEventArgs> StatusChanged
+    public event EventHandler<TouchStatusChangedEventArgs> StatusChanged
 	{
 		add => weakEventManager.AddEventHandler(value);
 		remove => weakEventManager.RemoveEventHandler(value);
@@ -117,7 +126,7 @@ public class TouchEffect : RoutingEffect
 		nameof(State),
 		typeof(TouchState),
 		typeof(TouchEffect),
-		TouchState.Normal,
+		TouchState.Default,
 		BindingMode.OneWayToSource);
 
 	public readonly static BindableProperty InteractionStatusProperty = BindableProperty.CreateAttached(
@@ -141,8 +150,8 @@ public class TouchEffect : RoutingEffect
 		HoverState.Normal,
 		BindingMode.OneWayToSource);
 
-	public readonly static BindableProperty NormalBackgroundColorProperty = BindableProperty.CreateAttached(
-		nameof(NormalBackgroundColor),
+	public readonly static BindableProperty DefaultBackgroundColorProperty = BindableProperty.CreateAttached(
+		nameof(DefaultBackgroundColor),
 		typeof(Color),
 		typeof(TouchEffect),
 		KnownColor.Default,
@@ -162,8 +171,8 @@ public class TouchEffect : RoutingEffect
         KnownColor.Default,
 		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty NormalOpacityProperty = BindableProperty.CreateAttached(
-		nameof(NormalOpacity),
+	public readonly static BindableProperty DefaultOpacityProperty = BindableProperty.CreateAttached(
+		nameof(DefaultOpacity),
 		typeof(double),
 		typeof(TouchEffect),
 		1.0,
@@ -183,8 +192,8 @@ public class TouchEffect : RoutingEffect
 		1.0,
 		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty NormalScaleProperty = BindableProperty.CreateAttached(
-		nameof(NormalScale),
+	public readonly static BindableProperty DefaultScaleProperty = BindableProperty.CreateAttached(
+		nameof(DefaultScale),
 		typeof(double),
 		typeof(TouchEffect),
 		1.0,
@@ -204,8 +213,8 @@ public class TouchEffect : RoutingEffect
 		1.0,
 		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty NormalTranslationXProperty = BindableProperty.CreateAttached(
-		nameof(NormalTranslationX),
+	public readonly static BindableProperty DefaultTranslationXProperty = BindableProperty.CreateAttached(
+		nameof(DefaultTranslationX),
 		typeof(double),
 		typeof(TouchEffect),
 		0.0,
@@ -225,8 +234,8 @@ public class TouchEffect : RoutingEffect
 		0.0,
 		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty NormalTranslationYProperty = BindableProperty.CreateAttached(
-		nameof(NormalTranslationY),
+	public readonly static BindableProperty DefaultTranslationYProperty = BindableProperty.CreateAttached(
+		nameof(DefaultTranslationY),
 		typeof(double),
 		typeof(TouchEffect),
 		0.0,
@@ -246,8 +255,8 @@ public class TouchEffect : RoutingEffect
 		0.0,
 		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty NormalRotationProperty = BindableProperty.CreateAttached(
-		nameof(NormalRotation),
+	public readonly static BindableProperty DefaultRotationProperty = BindableProperty.CreateAttached(
+		nameof(DefaultRotation),
 		typeof(double),
 		typeof(TouchEffect),
 		0.0,
@@ -267,8 +276,8 @@ public class TouchEffect : RoutingEffect
 		0.0,
 		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty NormalRotationXProperty = BindableProperty.CreateAttached(
-		nameof(NormalRotationX),
+	public readonly static BindableProperty DefaultRotationXProperty = BindableProperty.CreateAttached(
+		nameof(DefaultRotationX),
 		typeof(double),
 		typeof(TouchEffect),
 		0.0,
@@ -288,8 +297,8 @@ public class TouchEffect : RoutingEffect
 		0.0,
 		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty NormalRotationYProperty = BindableProperty.CreateAttached(
-		nameof(NormalRotationY),
+	public readonly static BindableProperty DefaultRotationYProperty = BindableProperty.CreateAttached(
+		nameof(DefaultRotationY),
 		typeof(double),
 		typeof(TouchEffect),
 		0.0,
@@ -337,15 +346,15 @@ public class TouchEffect : RoutingEffect
 		null,
 		propertyChanged: TryGenerateEffect);
 
-	public readonly static BindableProperty NormalAnimationDurationProperty = BindableProperty.CreateAttached(
-		nameof(NormalAnimationDuration),
+	public readonly static BindableProperty DefaultAnimationDurationProperty = BindableProperty.CreateAttached(
+		nameof(DefaultAnimationDuration),
 		typeof(int),
 		typeof(TouchEffect),
 		default(int),
 		propertyChanged: TryGenerateEffect);
 
-	public readonly static BindableProperty NormalAnimationEasingProperty = BindableProperty.CreateAttached(
-		nameof(NormalAnimationEasing),
+	public readonly static BindableProperty DefaultAnimationEasingProperty = BindableProperty.CreateAttached(
+		nameof(DefaultAnimationEasing),
 		typeof(Easing),
 		typeof(TouchEffect),
 		null,
@@ -422,63 +431,63 @@ public class TouchEffect : RoutingEffect
 		false,
 		propertyChanged: TryGenerateEffect);
 
-	public readonly static BindableProperty NormalBackgroundImageSourceProperty = BindableProperty.CreateAttached(
-		nameof(NormalBackgroundImageSource),
-		typeof(ImageSource),
-		typeof(TouchEffect),
-		default(ImageSource),
-		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
+    public readonly static BindableProperty DefaultBackgroundImageSourceProperty = BindableProperty.CreateAttached(
+        nameof(DefaultBackgroundImageSource),
+        typeof(ImageSource),
+        typeof(TouchEffect),
+        default(ImageSource),
+        propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty HoveredBackgroundImageSourceProperty = BindableProperty.CreateAttached(
-		nameof(HoveredBackgroundImageSource),
-		typeof(ImageSource),
-		typeof(TouchEffect),
-		default(ImageSource),
-		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
+    public readonly static BindableProperty HoveredBackgroundImageSourceProperty = BindableProperty.CreateAttached(
+        nameof(HoveredBackgroundImageSource),
+        typeof(ImageSource),
+        typeof(TouchEffect),
+        default(ImageSource),
+        propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty PressedBackgroundImageSourceProperty = BindableProperty.CreateAttached(
-		nameof(PressedBackgroundImageSource),
-		typeof(ImageSource),
-		typeof(TouchEffect),
-		default(ImageSource),
-		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
+    public readonly static BindableProperty PressedBackgroundImageSourceProperty = BindableProperty.CreateAttached(
+        nameof(PressedBackgroundImageSource),
+        typeof(ImageSource),
+        typeof(TouchEffect),
+        default(ImageSource),
+        propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty BackgroundImageAspectProperty = BindableProperty.CreateAttached(
-		nameof(BackgroundImageAspect),
-		typeof(Aspect),
-		typeof(TouchEffect),
-		default(Aspect),
-		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
+    public readonly static BindableProperty BackgroundImageAspectProperty = BindableProperty.CreateAttached(
+        nameof(BackgroundImageAspect),
+        typeof(Aspect),
+        typeof(TouchEffect),
+        default(Aspect),
+        propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty NormalBackgroundImageAspectProperty = BindableProperty.CreateAttached(
-		nameof(NormalBackgroundImageAspect),
-		typeof(Aspect),
-		typeof(TouchEffect),
-		default(Aspect),
-		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
+    public readonly static BindableProperty DefaultBackgroundImageAspectProperty = BindableProperty.CreateAttached(
+        nameof(DefaultBackgroundImageAspect),
+        typeof(Aspect),
+        typeof(TouchEffect),
+        default(Aspect),
+        propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty HoveredBackgroundImageAspectProperty = BindableProperty.CreateAttached(
-		nameof(HoveredBackgroundImageAspect),
-		typeof(Aspect),
-		typeof(TouchEffect),
-		default(Aspect),
-		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
+    public readonly static BindableProperty HoveredBackgroundImageAspectProperty = BindableProperty.CreateAttached(
+        nameof(HoveredBackgroundImageAspect),
+        typeof(Aspect),
+        typeof(TouchEffect),
+        default(Aspect),
+        propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty PressedBackgroundImageAspectProperty = BindableProperty.CreateAttached(
-		nameof(PressedBackgroundImageAspect),
-		typeof(Aspect),
-		typeof(TouchEffect),
-		default(Aspect),
-		propertyChanged: ForceUpdateStateAndTryGenerateEffect);
+    public readonly static BindableProperty PressedBackgroundImageAspectProperty = BindableProperty.CreateAttached(
+        nameof(PressedBackgroundImageAspect),
+        typeof(Aspect),
+        typeof(TouchEffect),
+        default(Aspect),
+        propertyChanged: ForceUpdateStateAndTryGenerateEffect);
 
-	public readonly static BindableProperty ShouldSetImageOnAnimationEndProperty = BindableProperty.CreateAttached(
-		nameof(ShouldSetImageOnAnimationEnd),
-		typeof(bool),
-		typeof(TouchEffect),
-		default(bool),
-		propertyChanged: TryGenerateEffect);
-    
-	private readonly GestureManager gestureManager;
+    public readonly static BindableProperty ShouldSetImageOnAnimationEndProperty = BindableProperty.CreateAttached(
+        nameof(ShouldSetImageOnAnimationEnd),
+        typeof(bool),
+        typeof(TouchEffect),
+        default(bool),
+        propertyChanged: TryGenerateEffect);
+
+    private readonly GestureManager gestureManager;
 
 	private readonly WeakEventManager weakEventManager;
 
@@ -632,14 +641,14 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(HoverStateProperty, value);
 	}
 
-	public static Color? GetNormalBackgroundColor(BindableObject? bindable)
+	public static Color? GetDefaultBackgroundColor(BindableObject? bindable)
     {
-        return bindable?.GetValue(NormalBackgroundColorProperty) as Color;
+        return bindable?.GetValue(DefaultBackgroundColorProperty) as Color;
     }
 
 	public static void SetNormalBackgroundColor(BindableObject? bindable, Color value)
 	{
-		bindable?.SetValue(NormalBackgroundColorProperty, value);
+		bindable?.SetValue(DefaultBackgroundColorProperty, value);
 	}
 
 	public static Color? GetHoveredBackgroundColor(BindableObject? bindable)
@@ -662,14 +671,14 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(PressedBackgroundColorProperty, value);
 	}
 
-	public static double GetNormalOpacity(BindableObject? bindable)
+	public static double GetDefaultOpacity(BindableObject? bindable)
 	{
-		return (double)(bindable?.GetValue(NormalOpacityProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+		return (double)(bindable?.GetValue(DefaultOpacityProperty) ?? throw new ArgumentNullException(nameof(bindable)));
 	}
 
 	public static void SetNormalOpacity(BindableObject? bindable, double value)
 	{
-		bindable?.SetValue(NormalOpacityProperty, value);
+		bindable?.SetValue(DefaultOpacityProperty, value);
 	}
 
 	public static double GetHoveredOpacity(BindableObject? bindable)
@@ -692,14 +701,14 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(PressedOpacityProperty, value);
 	}
 
-	public static double GetNormalScale(BindableObject? bindable)
+	public static double GetDefaultScale(BindableObject? bindable)
 	{
-		return (double)(bindable?.GetValue(NormalScaleProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+		return (double)(bindable?.GetValue(DefaultScaleProperty) ?? throw new ArgumentNullException(nameof(bindable)));
 	}
 
 	public static void SetNormalScale(BindableObject? bindable, double value)
 	{
-		bindable?.SetValue(NormalScaleProperty, value);
+		bindable?.SetValue(DefaultScaleProperty, value);
 	}
 
 	public static double GetHoveredScale(BindableObject? bindable)
@@ -722,14 +731,14 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(PressedScaleProperty, value);
 	}
 
-	public static double GetNormalTranslationX(BindableObject? bindable)
+	public static double GetDefaultTranslationX(BindableObject? bindable)
 	{
-		return (double)(bindable?.GetValue(NormalTranslationXProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+		return (double)(bindable?.GetValue(DefaultTranslationXProperty) ?? throw new ArgumentNullException(nameof(bindable)));
 	}
 
 	public static void SetNormalTranslationX(BindableObject? bindable, double value)
 	{
-		bindable?.SetValue(NormalTranslationXProperty, value);
+		bindable?.SetValue(DefaultTranslationXProperty, value);
 	}
 
 	public static double GetHoveredTranslationX(BindableObject? bindable)
@@ -752,14 +761,14 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(PressedTranslationXProperty, value);
 	}
 
-	public static double GetNormalTranslationY(BindableObject? bindable)
+	public static double GetDefaultTranslationY(BindableObject? bindable)
 	{
-		return (double)(bindable?.GetValue(NormalTranslationYProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+		return (double)(bindable?.GetValue(DefaultTranslationYProperty) ?? throw new ArgumentNullException(nameof(bindable)));
 	}
 
 	public static void SetNormalTranslationY(BindableObject? bindable, double value)
 	{
-		bindable?.SetValue(NormalTranslationYProperty, value);
+		bindable?.SetValue(DefaultTranslationYProperty, value);
 	}
 
 	public static double GetHoveredTranslationY(BindableObject? bindable)
@@ -782,14 +791,14 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(PressedTranslationYProperty, value);
 	}
 
-	public static double GetNormalRotation(BindableObject? bindable)
+	public static double GetDefaultRotation(BindableObject? bindable)
 	{
-		return (double)(bindable?.GetValue(NormalRotationProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+		return (double)(bindable?.GetValue(DefaultRotationProperty) ?? throw new ArgumentNullException(nameof(bindable)));
 	}
 
 	public static void SetNormalRotation(BindableObject? bindable, double value)
 	{
-		bindable?.SetValue(NormalRotationProperty, value);
+		bindable?.SetValue(DefaultRotationProperty, value);
 	}
 
 	public static double GetHoveredRotation(BindableObject? bindable)
@@ -812,14 +821,14 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(PressedRotationProperty, value);
 	}
 
-	public static double GetNormalRotationX(BindableObject? bindable)
+	public static double GetDefaultRotationX(BindableObject? bindable)
 	{
-		return (double)(bindable?.GetValue(NormalRotationXProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+		return (double)(bindable?.GetValue(DefaultRotationXProperty) ?? throw new ArgumentNullException(nameof(bindable)));
 	}
 
 	public static void SetNormalRotationX(BindableObject? bindable, double value)
 	{
-		bindable?.SetValue(NormalRotationXProperty, value);
+		bindable?.SetValue(DefaultRotationXProperty, value);
 	}
 
 	public static double GetHoveredRotationX(BindableObject? bindable)
@@ -842,14 +851,14 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(PressedRotationXProperty, value);
 	}
 
-	public static double GetNormalRotationY(BindableObject? bindable)
+	public static double GetDefaultRotationY(BindableObject? bindable)
 	{
-		return (double)(bindable?.GetValue(NormalRotationYProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+		return (double)(bindable?.GetValue(DefaultRotationYProperty) ?? throw new ArgumentNullException(nameof(bindable)));
 	}
 
 	public static void SetNormalRotationY(BindableObject? bindable, double value)
 	{
-		bindable?.SetValue(NormalRotationYProperty, value);
+		bindable?.SetValue(DefaultRotationYProperty, value);
 	}
 
 	public static double GetHoveredRotationY(BindableObject? bindable)
@@ -922,29 +931,29 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(PressedAnimationEasingProperty, value);
 	}
 
-	public static int GetNormalAnimationDuration(BindableObject? bindable)
+	public static int GetDefaultAnimationDuration(BindableObject? bindable)
 	{
-		return (int)(bindable?.GetValue(NormalAnimationDurationProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+		return (int)(bindable?.GetValue(DefaultAnimationDurationProperty) ?? throw new ArgumentNullException(nameof(bindable)));
 	}
 
 	public static void SetNormalAnimationDuration(BindableObject? bindable, int value)
 	{
-		bindable?.SetValue(NormalAnimationDurationProperty, value);
+		bindable?.SetValue(DefaultAnimationDurationProperty, value);
 	}
 
-	public static Easing? GetNormalAnimationEasing(BindableObject? bindable)
+	public static Easing? GetDefaultAnimationEasing(BindableObject? bindable)
 	{
 		if (bindable == null)
 		{
 			throw new ArgumentNullException(nameof(bindable));
 		}
 
-		return (Easing?)bindable.GetValue(NormalAnimationEasingProperty);
+		return (Easing?)bindable.GetValue(DefaultAnimationEasingProperty);
 	}
 
 	public static void SetNormalAnimationEasing(BindableObject? bindable, Easing? value)
 	{
-		bindable?.SetValue(NormalAnimationEasingProperty, value);
+		bindable?.SetValue(DefaultAnimationEasingProperty, value);
 	}
 
 	public static int GetHoveredAnimationDuration(BindableObject? bindable)
@@ -1057,102 +1066,7 @@ public class TouchEffect : RoutingEffect
 		bindable?.SetValue(NativeAnimationBorderlessProperty, value);
 	}
 
-	public static ImageSource? GetNormalBackgroundImageSource(BindableObject? bindable)
-	{
-		if (bindable == null)
-		{
-			throw new ArgumentNullException(nameof(bindable));
-		}
-
-		return (ImageSource?)bindable.GetValue(NormalBackgroundImageSourceProperty);
-	}
-
-	public static void SetNormalBackgroundImageSource(BindableObject? bindable, ImageSource value)
-	{
-		bindable?.SetValue(NormalBackgroundImageSourceProperty, value);
-	}
-
-	public static ImageSource? GetHoveredBackgroundImageSource(BindableObject? bindable)
-	{
-		if (bindable == null)
-		{
-			throw new ArgumentNullException(nameof(bindable));
-		}
-
-		return (ImageSource?)bindable.GetValue(HoveredBackgroundImageSourceProperty);
-	}
-
-	public static void SetHoveredBackgroundImageSource(BindableObject? bindable, ImageSource value)
-	{
-		bindable?.SetValue(HoveredBackgroundImageSourceProperty, value);
-	}
-
-	public static ImageSource? GetPressedBackgroundImageSource(BindableObject? bindable)
-	{
-		if (bindable == null)
-		{
-			throw new ArgumentNullException(nameof(bindable));
-		}
-
-		return (ImageSource?)bindable.GetValue(PressedBackgroundImageSourceProperty);
-	}
-
-	public static void SetPressedBackgroundImageSource(BindableObject? bindable, ImageSource value)
-	{
-		bindable?.SetValue(PressedBackgroundImageSourceProperty, value);
-	}
-
-	public static Aspect GetBackgroundImageAspect(BindableObject? bindable)
-	{
-		return (Aspect)(bindable?.GetValue(BackgroundImageAspectProperty) ?? throw new ArgumentNullException(nameof(bindable)));
-	}
-
-	public static void SetBackgroundImageAspect(BindableObject? bindable, Aspect value)
-	{
-		bindable?.SetValue(BackgroundImageAspectProperty, value);
-	}
-
-	public static Aspect GetNormalBackgroundImageAspect(BindableObject? bindable)
-	{
-		return (Aspect)(bindable?.GetValue(NormalBackgroundImageAspectProperty) ?? throw new ArgumentNullException(nameof(bindable)));
-	}
-
-	public static void SetNormalBackgroundImageAspect(BindableObject? bindable, Aspect value)
-	{
-		bindable?.SetValue(NormalBackgroundImageAspectProperty, value);
-	}
-
-	public static Aspect GetHoveredBackgroundImageAspect(BindableObject? bindable)
-	{
-		return (Aspect)(bindable?.GetValue(HoveredBackgroundImageAspectProperty) ?? throw new ArgumentNullException(nameof(bindable)));
-	}
-
-	public static void SetHoveredBackgroundImageAspect(BindableObject? bindable, Aspect value)
-	{
-		bindable?.SetValue(HoveredBackgroundImageAspectProperty, value);
-	}
-
-	public static Aspect GetPressedBackgroundImageAspect(BindableObject? bindable)
-	{
-		return (Aspect)(bindable?.GetValue(PressedBackgroundImageAspectProperty) ?? throw new ArgumentNullException(nameof(bindable)));
-	}
-
-	public static void SetPressedBackgroundImageAspect(BindableObject? bindable, Aspect value)
-	{
-		bindable?.SetValue(PressedBackgroundImageAspectProperty, value);
-	}
-
-	public static bool GetShouldSetImageOnAnimationEnd(BindableObject? bindable)
-	{
-		return (bool)(bindable?.GetValue(ShouldSetImageOnAnimationEndProperty) ?? throw new ArgumentNullException(nameof(bindable)));
-	}
-
-	public static void SetShouldSetImageOnAnimationEnd(BindableObject? bindable, bool value)
-	{
-		bindable?.SetValue(ShouldSetImageOnAnimationEndProperty, value);
-	}
-
-	private static void TryGenerateEffect(BindableObject? bindable, object oldValue, object newValue)
+	protected static void TryGenerateEffect(BindableObject? bindable, object oldValue, object newValue)
 	{
 		if (bindable is not VisualElement view || view.Effects.OfType<TouchEffect>().Any())
 		{
@@ -1165,13 +1079,13 @@ public class TouchEffect : RoutingEffect
 		});
 	}
 
-	private static void ForceUpdateStateAndTryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
+    protected static void ForceUpdateStateAndTryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
 	{
 		GetFrom(bindable)?.ForceUpdateState();
 		TryGenerateEffect(bindable, oldValue, newValue);
 	}
 
-	private static void ForceUpdateStateWithoutAnimationAndTryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
+    private static void ForceUpdateStateWithoutAnimationAndTryGenerateEffect(BindableObject bindable, object oldValue, object newValue)
 	{
 		GetFrom(bindable)?.ForceUpdateState();
 		TryGenerateEffect(bindable, oldValue, newValue);
@@ -1203,7 +1117,23 @@ public class TouchEffect : RoutingEffect
 
 	public TimeSpan LongPressDuration => GetLongPressDuration(Element);
 
-	public TouchStatus Status
+    public ImageSource? DefaultBackgroundImageSource => GetDefaultBackgroundImageSource(Element);
+
+    public ImageSource? HoveredBackgroundImageSource => GetHoveredBackgroundImageSource(Element);
+
+    public ImageSource? PressedBackgroundImageSource => GetPressedBackgroundImageSource(Element);
+
+    public Aspect BackgroundImageAspect => GetBackgroundImageAspect(Element);
+
+    public Aspect DefaultBackgroundImageAspect => GetDefaultBackgroundImageAspect(Element);
+
+    public Aspect HoveredBackgroundImageAspect => GetHoveredBackgroundImageAspect(Element);
+
+    public Aspect PressedBackgroundImageAspect => GetPressedBackgroundImageAspect(Element);
+
+    public bool ShouldSetImageOnAnimationEnd => GetShouldSetImageOnAnimationEnd(Element);
+
+    public TouchStatus Status
 	{
 		get => GetStatus(Element);
 		internal set => SetStatus(Element, value);
@@ -1233,7 +1163,102 @@ public class TouchEffect : RoutingEffect
 		internal set => SetHoverState(Element, value);
 	}
 
-	public int DisallowTouchThreshold => GetDisallowTouchThreshold(Element);
+    public static ImageSource? GetDefaultBackgroundImageSource(BindableObject? bindable)
+    {
+        if (bindable == null)
+        {
+            throw new ArgumentNullException(nameof(bindable));
+        }
+
+        return (ImageSource?)bindable.GetValue(DefaultBackgroundImageSourceProperty);
+    }
+
+    public static void SetDefaultBackgroundImageSource(BindableObject? bindable, ImageSource value)
+    {
+        bindable?.SetValue(DefaultBackgroundImageSourceProperty, value);
+    }
+
+    public static ImageSource? GetHoveredBackgroundImageSource(BindableObject? bindable)
+    {
+        if (bindable == null)
+        {
+            throw new ArgumentNullException(nameof(bindable));
+        }
+
+        return (ImageSource?)bindable.GetValue(HoveredBackgroundImageSourceProperty);
+    }
+
+    public static void SetHoveredBackgroundImageSource(BindableObject? bindable, ImageSource value)
+    {
+        bindable?.SetValue(HoveredBackgroundImageSourceProperty, value);
+    }
+
+    public static ImageSource? GetPressedBackgroundImageSource(BindableObject? bindable)
+    {
+        if (bindable == null)
+        {
+            throw new ArgumentNullException(nameof(bindable));
+        }
+
+        return (ImageSource?)bindable.GetValue(PressedBackgroundImageSourceProperty);
+    }
+
+    public static void SetPressedBackgroundImageSource(BindableObject? bindable, ImageSource value)
+    {
+        bindable?.SetValue(PressedBackgroundImageSourceProperty, value);
+    }
+
+    public static Aspect GetBackgroundImageAspect(BindableObject? bindable)
+    {
+        return (Aspect)(bindable?.GetValue(BackgroundImageAspectProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+    }
+
+    public static void SetBackgroundImageAspect(BindableObject? bindable, Aspect value)
+    {
+        bindable?.SetValue(BackgroundImageAspectProperty, value);
+    }
+
+    public static Aspect GetDefaultBackgroundImageAspect(BindableObject? bindable)
+    {
+        return (Aspect)(bindable?.GetValue(DefaultBackgroundImageAspectProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+    }
+
+    public static void SetDefaultBackgroundImageAspect(BindableObject? bindable, Aspect value)
+    {
+        bindable?.SetValue(DefaultBackgroundImageAspectProperty, value);
+    }
+
+    public static Aspect GetHoveredBackgroundImageAspect(BindableObject? bindable)
+    {
+        return (Aspect)(bindable?.GetValue(HoveredBackgroundImageAspectProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+    }
+
+    public static void SetHoveredBackgroundImageAspect(BindableObject? bindable, Aspect value)
+    {
+        bindable?.SetValue(HoveredBackgroundImageAspectProperty, value);
+    }
+
+    public static Aspect GetPressedBackgroundImageAspect(BindableObject? bindable)
+    {
+        return (Aspect)(bindable?.GetValue(PressedBackgroundImageAspectProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+    }
+
+    public static void SetPressedBackgroundImageAspect(BindableObject? bindable, Aspect value)
+    {
+        bindable?.SetValue(PressedBackgroundImageAspectProperty, value);
+    }
+
+    public static bool GetShouldSetImageOnAnimationEnd(BindableObject? bindable)
+    {
+        return (bool)(bindable?.GetValue(ShouldSetImageOnAnimationEndProperty) ?? throw new ArgumentNullException(nameof(bindable)));
+    }
+
+    public static void SetShouldSetImageOnAnimationEnd(BindableObject? bindable, bool value)
+    {
+        bindable?.SetValue(ShouldSetImageOnAnimationEndProperty, value);
+    }
+
+    public int DisallowTouchThreshold => GetDisallowTouchThreshold(Element);
 
 	public bool NativeAnimation => GetNativeAnimation(Element);
 
@@ -1245,49 +1270,49 @@ public class TouchEffect : RoutingEffect
 
 	public bool NativeAnimationBorderless => GetNativeAnimationBorderless(Element);
 
-	public Color? NormalBackgroundColor => GetNormalBackgroundColor(Element);
+	public Color? DefaultBackgroundColor => GetDefaultBackgroundColor(Element);
 
 	public Color? HoveredBackgroundColor => GetHoveredBackgroundColor(Element);
 
 	public Color? PressedBackgroundColor => GetPressedBackgroundColor(Element);
 
-	public double NormalOpacity => GetNormalOpacity(Element);
+	public double DefaultOpacity => GetDefaultOpacity(Element);
 
 	public double HoveredOpacity => GetHoveredOpacity(Element);
 
 	public double PressedOpacity => GetPressedOpacity(Element);
 
-	public double NormalScale => GetNormalScale(Element);
+	public double DefaultScale => GetDefaultScale(Element);
 
 	public double HoveredScale => GetHoveredScale(Element);
 
 	public double PressedScale => GetPressedScale(Element);
 
-	public double NormalTranslationX => GetNormalTranslationX(Element);
+	public double DefaultTranslationX => GetDefaultTranslationX(Element);
 
 	public double HoveredTranslationX => GetHoveredTranslationX(Element);
 
 	public double PressedTranslationX => GetPressedTranslationX(Element);
 
-	public double NormalTranslationY => GetNormalTranslationY(Element);
+	public double DefaultTranslationY => GetDefaultTranslationY(Element);
 
 	public double HoveredTranslationY => GetHoveredTranslationY(Element);
 
 	public double PressedTranslationY => GetPressedTranslationY(Element);
 
-	public double NormalRotation => GetNormalRotation(Element);
+	public double DefaultRotation => GetDefaultRotation(Element);
 
 	public double HoveredRotation => GetHoveredRotation(Element);
 
 	public double PressedRotation => GetPressedRotation(Element);
 
-	public double NormalRotationX => GetNormalRotationX(Element);
+	public double DefaultRotationX => GetDefaultRotationX(Element);
 
 	public double HoveredRotationX => GetHoveredRotationX(Element);
 
 	public double PressedRotationX => GetPressedRotationX(Element);
 
-	public double NormalRotationY => GetNormalRotationY(Element);
+	public double DefaultRotationY => GetDefaultRotationY(Element);
 
 	public double HoveredRotationY => GetHoveredRotationY(Element);
 
@@ -1301,9 +1326,9 @@ public class TouchEffect : RoutingEffect
 
 	public Easing? PressedAnimationEasing => GetPressedAnimationEasing(Element);
 
-	public int NormalAnimationDuration => GetNormalAnimationDuration(Element);
+	public int DefaultAnimationDuration => GetDefaultAnimationDuration(Element);
 
-	public Easing? NormalAnimationEasing => GetNormalAnimationEasing(Element);
+	public Easing? DefaultAnimationEasing => GetDefaultAnimationEasing(Element);
 
 	public int HoveredAnimationDuration => GetHoveredAnimationDuration(Element);
 
@@ -1316,22 +1341,6 @@ public class TouchEffect : RoutingEffect
 		get => GetIsToggled(Element);
 		internal set => SetIsToggled(Element, value);
 	}
-
-	public ImageSource? NormalBackgroundImageSource => GetNormalBackgroundImageSource(Element);
-
-	public ImageSource? HoveredBackgroundImageSource => GetHoveredBackgroundImageSource(Element);
-
-	public ImageSource? PressedBackgroundImageSource => GetPressedBackgroundImageSource(Element);
-
-	public Aspect BackgroundImageAspect => GetBackgroundImageAspect(Element);
-
-	public Aspect NormalBackgroundImageAspect => GetNormalBackgroundImageAspect(Element);
-
-	public Aspect HoveredBackgroundImageAspect => GetHoveredBackgroundImageAspect(Element);
-
-	public Aspect PressedBackgroundImageAspect => GetPressedBackgroundImageAspect(Element);
-
-	public bool ShouldSetImageOnAnimationEnd => GetShouldSetImageOnAnimationEnd(Element);
 
 	internal bool CanExecute => IsAvailable
 								&& (Element?.IsEnabled ?? false)

@@ -35,7 +35,7 @@ internal sealed class GestureManager
 
 			var state = status == TouchStatus.Started
 				? TouchState.Pressed
-				: TouchState.Normal;
+				: TouchState.Default;
 
 			if (status == TouchStatus.Started)
 			{
@@ -49,7 +49,7 @@ internal sealed class GestureManager
 				if (status != TouchStatus.Started)
 				{
 					_durationMultiplier = _animationState == TouchState.Pressed && !isToggled.Value ||
-										_animationState == TouchState.Normal && isToggled.Value
+										_animationState == TouchState.Default && isToggled.Value
 						? 1 - _animationProgress
 						: _animationProgress;
 
@@ -67,7 +67,7 @@ internal sealed class GestureManager
 				}
 
 				state = isToggled.Value
-					? TouchState.Normal
+					? TouchState.Default
 					: TouchState.Pressed;
 			}
 
@@ -136,7 +136,7 @@ internal sealed class GestureManager
 			{
 				state = isToggled.Value
 					? TouchState.Pressed
-					: TouchState.Normal;
+					: TouchState.Default;
 			}
 
 			var durationMultiplier = _durationMultiplier;
@@ -148,14 +148,14 @@ internal sealed class GestureManager
 
 		var pulseCount = sender.PulseCount;
 
-		if (pulseCount == 0 || state == TouchState.Normal && !isToggled.HasValue)
+		if (pulseCount == 0 || state == TouchState.Default && !isToggled.HasValue)
 		{
 			if (isToggled.HasValue)
 			{
 				state =
 					status == TouchStatus.Started && isToggled.Value ||
 					status != TouchStatus.Started && !isToggled.Value
-						? TouchState.Normal
+						? TouchState.Default
 						: TouchState.Pressed;
 			}
 
@@ -166,7 +166,7 @@ internal sealed class GestureManager
 		do
 		{
 			var rippleState = isToggled.HasValue && isToggled.Value
-				? TouchState.Normal
+				? TouchState.Default
 				: TouchState.Pressed;
 
 			await RunAnimationTask(sender, rippleState, hoverState, _animationTokenSource.Token);
@@ -177,7 +177,7 @@ internal sealed class GestureManager
 
 			rippleState = isToggled.HasValue && isToggled.Value
 				? TouchState.Pressed
-				: TouchState.Normal;
+				: TouchState.Default;
 
 			await RunAnimationTask(sender, rippleState, hoverState, _animationTokenSource.Token);
 			if (token.IsCancellationRequested)
@@ -189,7 +189,7 @@ internal sealed class GestureManager
 
 	internal void HandleLongPress(TouchEffect sender)
 	{
-		if (sender.State == TouchState.Normal)
+		if (sender.State == TouchState.Default)
 		{
 			_longPressTokenSource?.Cancel();
 			_longPressTokenSource?.Dispose();
@@ -332,75 +332,75 @@ internal sealed class GestureManager
 		_ = VisualStateManager.GoToState(visualElement, state);
 	}
 
-	private static async Task SetBackgroundImageAsync(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, CancellationToken token)
+    private static async Task SetBackgroundImageAsync(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, CancellationToken token)
+    {
+        var normalBackgroundImageSource = sender.DefaultBackgroundImageSource;
+        var pressedBackgroundImageSource = sender.PressedBackgroundImageSource;
+        var hoveredBackgroundImageSource = sender.HoveredBackgroundImageSource;
+
+        if (normalBackgroundImageSource == null &&
+            pressedBackgroundImageSource == null &&
+            hoveredBackgroundImageSource == null)
+        {
+            return;
+        }
+
+        var aspect = sender.BackgroundImageAspect;
+        var source = normalBackgroundImageSource;
+        if (touchState == TouchState.Pressed)
+        {
+            if (sender.Element?.IsSet(TouchEffect.PressedBackgroundImageAspectProperty) ?? false)
+            {
+                aspect = sender.PressedBackgroundImageAspect;
+            }
+
+            source = pressedBackgroundImageSource;
+        }
+        else if (hoverState == HoverState.Hovered)
+        {
+            if (sender.Element?.IsSet(TouchEffect.HoveredBackgroundImageAspectProperty) ?? false)
+            {
+                aspect = sender.HoveredBackgroundImageAspect;
+            }
+
+            if (sender.Element?.IsSet(TouchEffect.HoveredBackgroundImageSourceProperty) ?? false)
+            {
+                source = hoveredBackgroundImageSource;
+            }
+        }
+        else
+        {
+            if (sender.Element?.IsSet(TouchEffect.DefaultBackgroundImageAspectProperty) ?? false)
+            {
+                aspect = sender.DefaultBackgroundImageAspect;
+            }
+        }
+
+        try
+        {
+            if (sender.ShouldSetImageOnAnimationEnd && duration > 0)
+            {
+                await Task.Delay(duration, token);
+            }
+        }
+        catch (TaskCanceledException)
+        {
+            return;
+        }
+
+        if (sender.Element is Image image)
+        {
+            using (image.Batch())
+            {
+                image.Aspect = aspect;
+                image.Source = source;
+            }
+        }
+    }
+
+    private Task SetBackgroundColor(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 	{
-		var normalBackgroundImageSource = sender.NormalBackgroundImageSource;
-		var pressedBackgroundImageSource = sender.PressedBackgroundImageSource;
-		var hoveredBackgroundImageSource = sender.HoveredBackgroundImageSource;
-
-		if (normalBackgroundImageSource == null &&
-			pressedBackgroundImageSource == null &&
-			hoveredBackgroundImageSource == null)
-		{
-			return;
-		}
-
-		var aspect = sender.BackgroundImageAspect;
-		var source = normalBackgroundImageSource;
-		if (touchState == TouchState.Pressed)
-		{
-			if (sender.Element?.IsSet(TouchEffect.PressedBackgroundImageAspectProperty) ?? false)
-			{
-				aspect = sender.PressedBackgroundImageAspect;
-			}
-
-			source = pressedBackgroundImageSource;
-		}
-		else if (hoverState == HoverState.Hovered)
-		{
-			if (sender.Element?.IsSet(TouchEffect.HoveredBackgroundImageAspectProperty) ?? false)
-			{
-				aspect = sender.HoveredBackgroundImageAspect;
-			}
-
-			if (sender.Element?.IsSet(TouchEffect.HoveredBackgroundImageSourceProperty) ?? false)
-			{
-				source = hoveredBackgroundImageSource;
-			}
-		}
-		else
-		{
-			if (sender.Element?.IsSet(TouchEffect.NormalBackgroundImageAspectProperty) ?? false)
-			{
-				aspect = sender.NormalBackgroundImageAspect;
-			}
-		}
-
-		try
-		{
-			if (sender.ShouldSetImageOnAnimationEnd && duration > 0)
-			{
-				await Task.Delay(duration, token);
-			}
-		}
-		catch (TaskCanceledException)
-		{
-			return;
-		}
-
-		if (sender.Element is Image image)
-		{
-			using (image.Batch())
-			{
-				image.Aspect = aspect;
-				image.Source = source;
-			}
-		}
-	}
-
-	private Task SetBackgroundColor(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
-	{
-		var normalBackgroundColor = sender.NormalBackgroundColor;
+		var normalBackgroundColor = sender.DefaultBackgroundColor;
 		var pressedBackgroundColor = sender.PressedBackgroundColor;
 		var hoveredBackgroundColor = sender.HoveredBackgroundColor;
 
@@ -441,7 +441,7 @@ internal sealed class GestureManager
 
 	private static Task? SetOpacity(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 	{
-		var normalOpacity = sender.NormalOpacity;
+		var normalOpacity = sender.DefaultOpacity;
 		var pressedOpacity = sender.PressedOpacity;
 		var hoveredOpacity = sender.HoveredOpacity;
 
@@ -476,7 +476,7 @@ internal sealed class GestureManager
 
 	private Task SetScale(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 	{
-		var normalScale = sender.NormalScale;
+		var normalScale = sender.DefaultScale;
 		var pressedScale = sender.PressedScale;
 		var hoveredScale = sender.HoveredScale;
 
@@ -526,11 +526,11 @@ internal sealed class GestureManager
 
 	private static Task SetTranslation(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 	{
-		var normalTranslationX = sender.NormalTranslationX;
+		var normalTranslationX = sender.DefaultTranslationX;
 		var pressedTranslationX = sender.PressedTranslationX;
 		var hoveredTranslationX = sender.HoveredTranslationX;
 
-		var normalTranslationY = sender.NormalTranslationY;
+		var normalTranslationY = sender.DefaultTranslationY;
 		var pressedTranslationY = sender.PressedTranslationY;
 		var hoveredTranslationY = sender.HoveredTranslationY;
 
@@ -579,7 +579,7 @@ internal sealed class GestureManager
 
 	private static Task SetRotation(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 	{
-		var normalRotation = sender.NormalRotation;
+		var normalRotation = sender.DefaultRotation;
 		var pressedRotation = sender.PressedRotation;
 		var hoveredRotation = sender.HoveredRotation;
 
@@ -614,7 +614,7 @@ internal sealed class GestureManager
 
 	private static Task SetRotationX(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 	{
-		var normalRotationX = sender.NormalRotationX;
+		var normalRotationX = sender.DefaultRotationX;
 		var pressedRotationX = sender.PressedRotationX;
 		var hoveredRotationX = sender.HoveredRotationX;
 
@@ -649,7 +649,7 @@ internal sealed class GestureManager
 
 	private static Task SetRotationY(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
 	{
-		var normalRotationY = sender.NormalRotationY;
+		var normalRotationY = sender.DefaultRotationY;
 		var pressedRotationY = sender.PressedRotationY;
 		var hoveredRotationY = sender.HoveredRotationY;
 
@@ -725,14 +725,14 @@ internal sealed class GestureManager
 		}
 		else
 		{
-			if (sender.Element.IsSet(TouchEffect.NormalAnimationDurationProperty))
+			if (sender.Element.IsSet(TouchEffect.DefaultAnimationDurationProperty))
 			{
-				duration = sender.NormalAnimationDuration;
+				duration = sender.DefaultAnimationDuration;
 			}
 
-			if (sender.Element.IsSet(TouchEffect.NormalAnimationEasingProperty))
+			if (sender.Element.IsSet(TouchEffect.DefaultAnimationEasingProperty))
 			{
-				easing = sender.NormalAnimationEasing;
+				easing = sender.DefaultAnimationEasing;
 			}
 		}
 
