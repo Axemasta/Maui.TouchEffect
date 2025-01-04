@@ -4,9 +4,33 @@ using static System.Math;
 
 namespace Maui.TouchEffect;
 
-internal sealed class GestureManager
+internal sealed class GestureManager : IDisposable, IAsyncDisposable
 {
-	private const int _animationProgressDelay = 10;
+    CancellationTokenSource? longPressTokenSource, animationTokenSource;
+
+    public void Dispose()
+    {
+        animationTokenSource?.Cancel();
+        animationTokenSource?.Dispose();
+
+        longPressTokenSource?.Cancel();
+        longPressTokenSource?.Dispose();
+
+        longPressTokenSource = animationTokenSource = null;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await(animationTokenSource?.CancelAsync() ?? Task.CompletedTask);
+        animationTokenSource?.Dispose();
+
+        await(longPressTokenSource?.CancelAsync() ?? Task.CompletedTask);
+        longPressTokenSource?.Dispose();
+
+        longPressTokenSource = animationTokenSource = null;
+    }
+
+    private const int _animationProgressDelay = 10;
 #pragma warning disable IDE1006 // Naming Styles
     private Color? _defaultBackgroundColor;
 
@@ -82,9 +106,9 @@ internal sealed class GestureManager
 
 	internal static void HandleUserInteraction(TouchEffect sender, TouchInteractionStatus interactionStatus)
 	{
-		if (sender.InteractionStatus != interactionStatus)
+		if (sender.CurrentInteractionStatus != interactionStatus)
 		{
-			sender.InteractionStatus = interactionStatus;
+			sender.CurrentInteractionStatus = interactionStatus;
 			sender.RaiseInteractionStatusChanged();
 		}
 	}
@@ -100,24 +124,24 @@ internal sealed class GestureManager
 			? HoverState.Hovered
 			: HoverState.Normal;
 
-		if (sender.HoverState != hoverState)
+		if (sender.CurrentHoverState != hoverState)
 		{
-			sender.HoverState = hoverState;
+			sender.CurrentHoverState = hoverState;
 			sender.RaiseHoverStateChanged();
 		}
 
-		if (sender.HoverStatus != status)
+		if (sender.CurrentHoverStatus != status)
 		{
-			sender.HoverStatus = status;
+			sender.CurrentHoverStatus = status;
 			sender.RaiseHoverStatusChanged();
 		}
 	}
 
 	internal async Task ChangeStateAsync(TouchEffect sender, bool animated)
 	{
-		var status = sender.Status;
-		var state = sender.State;
-		var hoverState = sender.HoverState;
+		var status = sender.CurrentTouchStatus;
+		var state = sender.CurrentTouchState;
+		var hoverState = sender.CurrentHoverState;
 
 		AbortAnimations(sender);
 		_animationTokenSource = new CancellationTokenSource();
@@ -189,7 +213,7 @@ internal sealed class GestureManager
 
 	internal void HandleLongPress(TouchEffect sender)
 	{
-		if (sender.State == TouchState.Default)
+		if (sender.CurrentTouchState == TouchState.Default)
 		{
 			_longPressTokenSource?.Cancel();
 			_longPressTokenSource?.Dispose();
@@ -197,7 +221,7 @@ internal sealed class GestureManager
 			return;
 		}
 
-		if (sender.LongPressCommand == null || sender.InteractionStatus == TouchInteractionStatus.Completed)
+		if (sender.LongPressCommand == null || sender.CurrentInteractionStatus == TouchInteractionStatus.Completed)
 		{
 			return;
 		}
@@ -245,7 +269,7 @@ internal sealed class GestureManager
 
 	internal void OnTapped(TouchEffect sender)
 	{
-		if (!sender.CanExecute || sender.LongPressCommand != null && sender.InteractionStatus == TouchInteractionStatus.Completed)
+		if (!sender.CanExecute || sender.LongPressCommand != null && sender.CurrentInteractionStatus == TouchInteractionStatus.Completed)
 		{
 			return;
 		}
@@ -311,12 +335,12 @@ internal sealed class GestureManager
 
 	private static void UpdateStatusAndState(TouchEffect sender, TouchStatus status, TouchState state)
 	{
-		sender.Status = status;
+		sender.CurrentTouchStatus = status;
 		sender.RaiseStatusChanged();
 
-		if (sender.State != state || status != TouchStatus.Canceled)
+		if (sender.CurrentTouchState != state || status != TouchStatus.Canceled)
 		{
-			sender.State = state;
+			sender.CurrentTouchState = state;
 			sender.RaiseStateChanged();
 		}
 	}
@@ -334,9 +358,9 @@ internal sealed class GestureManager
 
     private static async Task SetBackgroundImageAsync(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, CancellationToken token)
     {
-        var normalBackgroundImageSource = sender.DefaultBackgroundImageSource;
-        var pressedBackgroundImageSource = sender.PressedBackgroundImageSource;
-        var hoveredBackgroundImageSource = sender.HoveredBackgroundImageSource;
+        var normalBackgroundImageSource = sender.DefaultImageSource;
+        var pressedBackgroundImageSource = sender.PressedImageSource;
+        var hoveredBackgroundImageSource = sender.HoveredImageSource;
 
         if (normalBackgroundImageSource == null &&
             pressedBackgroundImageSource == null &&
@@ -345,34 +369,34 @@ internal sealed class GestureManager
             return;
         }
 
-        var aspect = sender.BackgroundImageAspect;
+        var aspect = sender.DefaultImageAspect;
         var source = normalBackgroundImageSource;
         if (touchState == TouchState.Pressed)
         {
-            if (sender.Element?.IsSet(TouchEffect.PressedBackgroundImageAspectProperty) ?? false)
+            if (sender.Element?.IsSet(TouchEffect.PressedImageAspectProperty) ?? false)
             {
-                aspect = sender.PressedBackgroundImageAspect;
+                aspect = sender.PressedImageAspect;
             }
 
             source = pressedBackgroundImageSource;
         }
         else if (hoverState == HoverState.Hovered)
         {
-            if (sender.Element?.IsSet(TouchEffect.HoveredBackgroundImageAspectProperty) ?? false)
+            if (sender.Element?.IsSet(TouchEffect.HoveredImageAspectProperty) ?? false)
             {
-                aspect = sender.HoveredBackgroundImageAspect;
+                aspect = sender.HoveredImageAspect;
             }
 
-            if (sender.Element?.IsSet(TouchEffect.HoveredBackgroundImageSourceProperty) ?? false)
+            if (sender.Element?.IsSet(TouchEffect.HoveredImageSourceProperty) ?? false)
             {
                 source = hoveredBackgroundImageSource;
             }
         }
         else
         {
-            if (sender.Element?.IsSet(TouchEffect.DefaultBackgroundImageAspectProperty) ?? false)
+            if (sender.Element?.IsSet(TouchEffect.DefaultImageAspectProperty) ?? false)
             {
-                aspect = sender.DefaultBackgroundImageAspect;
+                aspect = sender.DefaultImageAspect;
             }
         }
 
@@ -696,8 +720,8 @@ internal sealed class GestureManager
 			return Task.FromResult(false);
 		}
 
-		var duration = sender.AnimationDuration;
-		var easing = sender.AnimationEasing;
+		var duration = sender.DefaultAnimationDuration;
+		var easing = sender.DefaultAnimationEasing;
 
 		if (touchState == TouchState.Pressed)
 		{

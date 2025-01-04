@@ -121,7 +121,7 @@ internal sealed class TouchUITapGestureRecognizer : UIGestureRecognizer
 			return;
 		}
 
-		HandleTouch(touchEffect?.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled, TouchInteractionStatus.Completed).SafeFireAndForget();
+		HandleTouch(touchEffect?.CurrentTouchStatus == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled, TouchInteractionStatus.Completed).SafeFireAndForget();
 
 		IsCanceled = true;
 
@@ -169,7 +169,7 @@ internal sealed class TouchUITapGestureRecognizer : UIGestureRecognizer
 			? TouchStatus.Started
 			: TouchStatus.Canceled;
 
-		if (touchEffect?.Status != status)
+		if (touchEffect?.CurrentTouchStatus != status)
 		{
 			HandleTouch(status).SafeFireAndForget();
 		}

@@ -41,9 +41,9 @@
                 <Label Text="Scale | Fade | Animated" />
 
                 <StackLayout
-                    touch:TouchEffect.AnimationDuration="250"
-                    touch:TouchEffect.AnimationEasing="{x:Static Easing.CubicInOut}"
                     touch:TouchEffect.Command="{Binding TouchCommand}"
+                    touch:TouchEffect.DefaultAnimationDuration="250"
+                    touch:TouchEffect.DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
                     touch:TouchEffect.PressedOpacity="0.6"
                     touch:TouchEffect.PressedScale="0.8"
                     HorizontalOptions="CenterAndExpand"
@@ -93,7 +93,7 @@
 
                 <StackLayout
                     Padding="20"
-                    touch:TouchEffect.AnimationDuration="500"
+                    touch:TouchEffect.DefaultAnimationDuration="500"
                     touch:TouchEffect.Command="{Binding TouchCommand}"
                     touch:TouchEffect.DefaultBackgroundColor="Gold"
                     touch:TouchEffect.PressedBackgroundColor="Orange"

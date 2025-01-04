@@ -26,9 +26,9 @@
             <Label Text="Image | Toggle" />
             <Image
                 touch:TouchEffect.Command="{Binding TouchCommand}"
-                touch:TouchEffect.DefaultBackgroundImageSource="button.png"
+                touch:TouchEffect.DefaultImageSource="button.png"
                 touch:TouchEffect.IsToggled="False"
-                touch:TouchEffect.PressedBackgroundImageSource="button_pressed.png"
+                touch:TouchEffect.PressedImageSource="button_pressed.png"
                 HeightRequest="100"
                 WidthRequest="100" />
 

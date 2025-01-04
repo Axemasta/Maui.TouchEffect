@@ -152,7 +152,7 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
     protected override void OnElementPropertyChanged(PropertyChangedEventArgs args)
     {
         base.OnElementPropertyChanged(args);
-        if (args.PropertyName == TouchEffect.IsAvailableProperty.PropertyName ||
+        if (args.PropertyName == TouchEffect.IsEnabledProperty.PropertyName ||
             args.PropertyName == VisualElement.IsEnabledProperty.PropertyName)
         {
             UpdateClickHandler();
@@ -162,7 +162,7 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
     void UpdateClickHandler()
     {
         _view.Click -= OnClick;
-        if (IsAccessibilityMode || (effect?.IsAvailable ?? false) && (effect?.Element?.IsEnabled ?? false))
+        if (IsAccessibilityMode || (effect?.IsEnabled ?? false) && (effect?.Element?.IsEnabled ?? false))
         {
             _view.Click += OnClick;
             return;
@@ -221,7 +221,7 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
     }
 
     void OnTouchUp()
-        => HandleEnd(effect?.Status == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
+        => HandleEnd(effect?.CurrentTouchStatus == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
 
     void OnTouchCancel()
         => HandleEnd(TouchStatus.Canceled);
@@ -249,11 +249,11 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         var viewRect = new Rect(view.Left, view.Top, view.Right - view.Left, view.Bottom - view.Top);
         var status = viewRect.Contains(screenPointerCoords) ? TouchStatus.Started : TouchStatus.Canceled;
 
-        if (isHoverSupported && (status == TouchStatus.Canceled && effect?.HoverStatus == HoverStatus.Entered
-            || status == TouchStatus.Started && effect?.HoverStatus == HoverStatus.Exited))
+        if (isHoverSupported && (status == TouchStatus.Canceled && effect?.CurrentHoverStatus == HoverStatus.Entered
+            || status == TouchStatus.Started && effect?.CurrentHoverStatus == HoverStatus.Exited))
             effect?.HandleHover(status == TouchStatus.Started ? HoverStatus.Entered : HoverStatus.Exited);
 
-        if (effect?.Status != status)
+        if (effect?.CurrentTouchStatus != status)
         {
             effect?.HandleTouch(status);
 
