@@ -2,6 +2,6 @@
 
 public enum HoverState
 {
-	Normal,
+	Default,
 	Hovered
 }

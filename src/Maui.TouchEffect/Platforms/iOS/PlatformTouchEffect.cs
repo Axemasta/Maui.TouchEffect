@@ -121,7 +121,7 @@ internal sealed class TouchUITapGestureRecognizer : UIGestureRecognizer
 			return;
 		}
 
-		HandleTouch(touchEffect?.CurrentTouchStatus == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled, TouchInteractionStatus.Completed).SafeFireAndForget();
+		HandleTouch(touchEffect?.CurrentTouchStatus == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Cancelled, TouchInteractionStatus.Completed).SafeFireAndForget();
 
 		IsCanceled = true;
 
@@ -135,7 +135,7 @@ internal sealed class TouchUITapGestureRecognizer : UIGestureRecognizer
 			return;
 		}
 
-		HandleTouch(TouchStatus.Canceled, TouchInteractionStatus.Completed).SafeFireAndForget();
+		HandleTouch(TouchStatus.Cancelled, TouchInteractionStatus.Completed).SafeFireAndForget();
 
 		IsCanceled = true;
 
@@ -158,7 +158,7 @@ internal sealed class TouchUITapGestureRecognizer : UIGestureRecognizer
 			var maxDiff = Math.Max(diffX, diffY);
 			if (maxDiff > disallowTouchThreshold)
 			{
-				HandleTouch(TouchStatus.Canceled, TouchInteractionStatus.Completed).SafeFireAndForget();
+				HandleTouch(TouchStatus.Cancelled, TouchInteractionStatus.Completed).SafeFireAndForget();
 				IsCanceled = true;
 				base.TouchesMoved(touches, evt);
 				return;
@@ -167,14 +167,14 @@ internal sealed class TouchUITapGestureRecognizer : UIGestureRecognizer
 
 		var status = point != null && View?.Bounds.Contains(point.Value) is true
 			? TouchStatus.Started
-			: TouchStatus.Canceled;
+			: TouchStatus.Cancelled;
 
 		if (touchEffect?.CurrentTouchStatus != status)
 		{
 			HandleTouch(status).SafeFireAndForget();
 		}
 
-		if (status == TouchStatus.Canceled)
+		if (status == TouchStatus.Cancelled)
 		{
 			IsCanceled = true;
 		}
@@ -269,7 +269,7 @@ internal sealed class TouchUITapGestureRecognizer : UIGestureRecognizer
 			if (gestureRecognizer is TouchUITapGestureRecognizer touchGesture && otherGestureRecognizer is UIPanGestureRecognizer &&
 			    otherGestureRecognizer.State == UIGestureRecognizerState.Began)
 			{
-				touchGesture.HandleTouch(TouchStatus.Canceled, TouchInteractionStatus.Completed).SafeFireAndForget();
+				touchGesture.HandleTouch(TouchStatus.Cancelled, TouchInteractionStatus.Completed).SafeFireAndForget();
 				touchGesture.IsCanceled = true;
 			}
 

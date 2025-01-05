@@ -151,7 +151,7 @@ public partial class TouchEffect : RoutingEffect
         nameof(CurrentHoverState),
         typeof(HoverState),
         typeof(TouchEffect),
-        HoverState.Normal,
+        HoverState.Default,
         BindingMode.OneWayToSource);
 
     /// <summary>

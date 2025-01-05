@@ -4,5 +4,5 @@ public enum TouchStatus
 {
 	Started,
 	Completed,
-	Canceled,
+	Cancelled,
 }

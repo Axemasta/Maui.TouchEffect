@@ -221,10 +221,10 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
     }
 
     void OnTouchUp()
-        => HandleEnd(effect?.CurrentTouchStatus == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Canceled);
+        => HandleEnd(effect?.CurrentTouchStatus == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Cancelled);
 
     void OnTouchCancel()
-        => HandleEnd(TouchStatus.Canceled);
+        => HandleEnd(TouchStatus.Cancelled);
 
     void OnTouchMove(object sender, AView.TouchEventArgs e)
     {
@@ -238,7 +238,7 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         var disallowTouchThreshold = effect?.DisallowTouchThreshold;
         if (disallowTouchThreshold > 0 && maxDiff > disallowTouchThreshold)
         {
-            HandleEnd(TouchStatus.Canceled);
+            HandleEnd(TouchStatus.Cancelled);
             return;
         }
 
@@ -247,9 +247,9 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
 
         var screenPointerCoords = new Point(view.Left + e.Event.GetX(), view.Top + e.Event.GetY());
         var viewRect = new Rect(view.Left, view.Top, view.Right - view.Left, view.Bottom - view.Top);
-        var status = viewRect.Contains(screenPointerCoords) ? TouchStatus.Started : TouchStatus.Canceled;
+        var status = viewRect.Contains(screenPointerCoords) ? TouchStatus.Started : TouchStatus.Cancelled;
 
-        if (isHoverSupported && (status == TouchStatus.Canceled && effect?.CurrentHoverStatus == HoverStatus.Entered
+        if (isHoverSupported && (status == TouchStatus.Cancelled && effect?.CurrentHoverStatus == HoverStatus.Entered
             || status == TouchStatus.Started && effect?.CurrentHoverStatus == HoverStatus.Exited))
             effect?.HandleHover(status == TouchStatus.Started ? HoverStatus.Entered : HoverStatus.Exited);
 
@@ -259,7 +259,7 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
 
             if (status == TouchStatus.Started)
                 StartRipple(e.Event.GetX(), e.Event.GetY());
-            if (status == TouchStatus.Canceled)
+            if (status == TouchStatus.Cancelled)
                 EndRipple();
         }
     }
