@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 using Android.Content;
 using Android.Content.Res;
 using Android.Graphics.Drawables;
@@ -5,110 +7,106 @@ using Android.OS;
 using Android.Views;
 using Android.Views.Accessibility;
 using Android.Widget;
-using Microsoft.Maui.Controls.Compatibility.Platform.Android;
-using System.ComponentModel;
+
+using Maui.TouchEffect.Enums;
+
+using Microsoft.Maui.Platform;
+
 using AView = Android.Views.View;
 using Color = Android.Graphics.Color;
-using Mview = Microsoft.Maui.Controls.View;
-using Mcolor = Microsoft.Maui.Graphics.Color;
-using Maui.TouchEffect.Enums;
-using Microsoft.Maui.Platform;
+using MColor = Microsoft.Maui.Graphics.Color;
+using MView = Microsoft.Maui.Controls.View;
 
 namespace Maui.TouchEffect;
 
 public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffect
 {
-    private static readonly Mcolor defaultNativeAnimationColor = new(128, 128, 128, 64);
+    private static readonly MColor defaultNativeAnimationColor = new(128, 128, 128, 64);
 
     AccessibilityManager? accessibilityManager;
     AccessibilityListener? accessibilityListener;
-    TouchEffect? effect;
+
+    TouchEffect? touchEffect;
+
     bool isHoverSupported;
-    RippleDrawable? ripple;
-    AView? rippleView;
     float startX;
     float startY;
-#pragma warning disable IDE1006
-    Mcolor? _rippleColor;
-    int _rippleRadius = -1;
-#pragma warning restore IDE1006
 
-    AView _view => Control ?? Container;
+    RippleDrawable? ripple;
+    AView? rippleView;
+    MColor? rippleColor;
+    int rippleRadius = -1;
 
-    ViewGroup? _group => (Container ?? Control) as ViewGroup;
+    AView View => Control ?? Container;
 
-    internal bool IsCanceled { get; set; }
+    ViewGroup? ViewGroup => (Container ?? Control) as ViewGroup;
 
-    bool IsAccessibilityMode => accessibilityManager != null
+    bool IsAccessibilityMode => accessibilityManager is not null
         && accessibilityManager.IsEnabled
         && accessibilityManager.IsTouchExplorationEnabled;
 
-    bool IsForegroundRippleWithTapGestureRecognizer
-        => ripple != null &&
-            ripple.IsAlive() &&
-            _view.IsAlive() &&
-            _view.Foreground == ripple &&
-            Element is Mview view &&
-            view.GestureRecognizers.Any(gesture => gesture is TapGestureRecognizer);
+    private readonly bool isAtLeastM = OperatingSystem.IsAndroidVersionAtLeast((int)BuildVersionCodes.M);
+
+    internal bool IsCanceled { get; set; }
+
+    bool IsForegroundRippleWithTapGestureRecognizer => 
+        ripple != null &&
+        ripple.IsAlive() &&
+        View.IsAlive() &&
+        View.Foreground == ripple &&
+        Element is MView mView &&
+        mView.GestureRecognizers.Any(gesture => gesture is TapGestureRecognizer);
 
     protected override void OnAttached()
     {
-        if (_view == null)
+        if (View is null)
+        {
             return;
+        }
 
-        effect = TouchEffect.PickFrom(Element);
-        if (effect?.IsDisabled ?? true)
+        touchEffect = TouchEffect.PickFrom(Element);
+
+        if (touchEffect?.IsDisabled ?? true)
+        {
             return;
+        }
 
-        effect.Element = (VisualElement)Element;
+        touchEffect.Element = Element as VisualElement;
 
-        _view.Touch += OnTouch;
+        View.Touch += OnTouch;
         UpdateClickHandler();
 
-        accessibilityManager = _view.Context?.GetSystemService(Context.AccessibilityService) as AccessibilityManager;
-        if (accessibilityManager != null)
+        accessibilityManager = View.Context?.GetSystemService(Context.AccessibilityService) as AccessibilityManager;
+
+        if (accessibilityManager is not null)
         {
             accessibilityListener = new AccessibilityListener(this);
             accessibilityManager.AddAccessibilityStateChangeListener(accessibilityListener);
             accessibilityManager.AddTouchExplorationStateChangeListener(accessibilityListener);
         }
 
-        if (Build.VERSION.SdkInt < BuildVersionCodes.Lollipop || !effect.NativeAnimation)
-            return;
-
-        _view.Clickable = true;
-        _view.LongClickable = true;
-        CreateRipple();
-
-        if (_group == null)
+        if (!OperatingSystem.IsAndroidVersionAtLeast((int)BuildVersionCodes.Lollipop) || !touchEffect.NativeAnimation)
         {
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
-                _view.Foreground = ripple;
-
             return;
         }
 
-        rippleView = new FrameLayout(_group.Context ?? throw new NullReferenceException())
-        {
-            LayoutParameters = new ViewGroup.LayoutParams(-1, -1),
-            Clickable = false,
-            Focusable = false,
-            Enabled = false,
-        };
-        _view.LayoutChange += OnLayoutChange;
-        rippleView.Background = ripple;
-        _group.AddView(rippleView);
-        rippleView.BringToFront();
+        View.Clickable = true;
+        View.LongClickable = true;
+
+        CreateRipple();
+        ApplyRipple();
+
+        View.LayoutChange += OnLayoutChange;
     }
 
     protected override void OnDetached()
     {
-        if (effect?.Element == null)
+        if (touchEffect?.Element is null)
             return;
 
         try
         {
-            if (accessibilityManager != null && accessibilityListener != null)
+            if (accessibilityManager is not null && accessibilityListener is not null)
             {
                 accessibilityManager.RemoveAccessibilityStateChangeListener(accessibilityListener);
                 accessibilityManager.RemoveTouchExplorationStateChangeListener(accessibilityListener);
@@ -117,30 +115,25 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
                 accessibilityListener = null;
             }
 
-            if (_view != null)
-            {
-                _view.LayoutChange -= OnLayoutChange;
-                _view.Touch -= OnTouch;
-                _view.Click -= OnClick;
+            RemoveRipple();
 
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.M && _view.Foreground == ripple)
-                    _view.Foreground = null;
+            if (View is not null)
+            {
+                View.LayoutChange -= OnLayoutChange;
+                View.Touch -= OnTouch;
+                View.Click -= OnClick;
             }
 
-            effect.Element = null;
-            effect = null;
+            touchEffect.Element = null;
+            touchEffect = null;
 
-            if (rippleView != null)
+            if (rippleView is not null)
             {
                 rippleView.Pressed = false;
-                rippleView.Background = null;
-                _group?.RemoveView(rippleView);
+                ViewGroup?.RemoveView(rippleView);
                 rippleView.Dispose();
                 rippleView = null;
             }
-
-            ripple?.Dispose();
-            ripple = null;
         }
         catch (ObjectDisposedException)
         {
@@ -152,28 +145,46 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
     protected override void OnElementPropertyChanged(PropertyChangedEventArgs args)
     {
         base.OnElementPropertyChanged(args);
+
         if (args.PropertyName == TouchEffect.IsEnabledProperty.PropertyName ||
             args.PropertyName == VisualElement.IsEnabledProperty.PropertyName)
         {
             UpdateClickHandler();
         }
+
+        if (args.PropertyName == TouchEffect.NativeAnimationBorderlessProperty.PropertyName)
+        {
+            CreateRipple();
+            ApplyRipple();
+        }
     }
 
-    void UpdateClickHandler()
+    private void UpdateClickHandler()
     {
-        _view.Click -= OnClick;
-        if (IsAccessibilityMode || (effect?.IsEnabled ?? false) && (effect?.Element?.IsEnabled ?? false))
+        if (View is null || !View.IsAlive())
         {
-            _view.Click += OnClick;
+            return;
+        }
+
+        View.Click -= OnClick;
+
+        if (touchEffect is null)
+        {
+            return;
+        }
+
+        if (IsAccessibilityMode || (touchEffect.IsEnabled && (touchEffect?.Element?.IsEnabled ?? false)))
+        {
+            View.Click += OnClick;
             return;
         }
     }
 
-    void OnTouch(object sender, AView.TouchEventArgs e)
+    void OnTouch(object? sender, AView.TouchEventArgs e)
     {
         e.Handled = false;
 
-        if (effect?.IsDisabled ?? true)
+        if (touchEffect?.IsDisabled ?? true)
             return;
 
         if (IsAccessibilityMode)
@@ -211,31 +222,33 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         startX = e.Event.GetX();
         startY = e.Event.GetY();
 
-        effect?.HandleUserInteraction(TouchInteractionStatus.Started);
-        effect?.HandleTouch(TouchStatus.Started);
+        touchEffect?.HandleUserInteraction(TouchInteractionStatus.Started);
+        touchEffect?.HandleTouch(TouchStatus.Started);
 
         StartRipple(e.Event.GetX(), e.Event.GetY());
 
-        if (effect?.DisallowTouchThreshold > 0)
-            _group?.Parent?.RequestDisallowInterceptTouchEvent(true);
+        if (touchEffect?.DisallowTouchThreshold > 0)
+        {
+            ViewGroup?.Parent?.RequestDisallowInterceptTouchEvent(true);
+        }
     }
 
     void OnTouchUp()
-        => HandleEnd(effect?.CurrentTouchStatus == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Cancelled);
+        => HandleEnd(touchEffect?.CurrentTouchStatus == TouchStatus.Started ? TouchStatus.Completed : TouchStatus.Cancelled);
 
     void OnTouchCancel()
         => HandleEnd(TouchStatus.Cancelled);
 
-    void OnTouchMove(object sender, AView.TouchEventArgs e)
+    void OnTouchMove(object? sender, AView.TouchEventArgs e)
     {
         if (IsCanceled || e.Event == null)
             return;
 
-        var diffX = Math.Abs(e.Event.GetX() - startX) / _view.Context?.Resources?.DisplayMetrics?.Density ?? throw new NullReferenceException();
-        var diffY = Math.Abs(e.Event.GetY() - startY) / _view.Context?.Resources?.DisplayMetrics?.Density ?? throw new NullReferenceException();
+        var diffX = Math.Abs(e.Event.GetX() - startX) / this.View.Context?.Resources?.DisplayMetrics?.Density ?? throw new NullReferenceException();
+        var diffY = Math.Abs(e.Event.GetY() - startY) / this.View.Context?.Resources?.DisplayMetrics?.Density ?? throw new NullReferenceException();
         var maxDiff = Math.Max(diffX, diffY);
 
-        var disallowTouchThreshold = effect?.DisallowTouchThreshold;
+        var disallowTouchThreshold = touchEffect?.DisallowTouchThreshold;
         if (disallowTouchThreshold > 0 && maxDiff > disallowTouchThreshold)
         {
             HandleEnd(TouchStatus.Cancelled);
@@ -249,13 +262,13 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         var viewRect = new Rect(view.Left, view.Top, view.Right - view.Left, view.Bottom - view.Top);
         var status = viewRect.Contains(screenPointerCoords) ? TouchStatus.Started : TouchStatus.Cancelled;
 
-        if (isHoverSupported && (status == TouchStatus.Cancelled && effect?.CurrentHoverStatus == HoverStatus.Entered
-            || status == TouchStatus.Started && effect?.CurrentHoverStatus == HoverStatus.Exited))
-            effect?.HandleHover(status == TouchStatus.Started ? HoverStatus.Entered : HoverStatus.Exited);
+        if (isHoverSupported && (status == TouchStatus.Cancelled && touchEffect?.CurrentHoverStatus == HoverStatus.Entered
+            || status == TouchStatus.Started && touchEffect?.CurrentHoverStatus == HoverStatus.Exited))
+            touchEffect?.HandleHover(status == TouchStatus.Started ? HoverStatus.Entered : HoverStatus.Exited);
 
-        if (effect?.CurrentTouchStatus != status)
+        if (touchEffect?.CurrentTouchStatus != status)
         {
-            effect?.HandleTouch(status);
+            touchEffect?.HandleTouch(status);
 
             if (status == TouchStatus.Started)
                 StartRipple(e.Event.GetX(), e.Event.GetY());
@@ -267,18 +280,18 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
     void OnHoverEnter()
     {
         isHoverSupported = true;
-        effect?.HandleHover(HoverStatus.Entered);
+        touchEffect?.HandleHover(HoverStatus.Entered);
     }
 
     void OnHoverExit()
     {
         isHoverSupported = true;
-        effect?.HandleHover(HoverStatus.Exited);
+        touchEffect?.HandleHover(HoverStatus.Exited);
     }
 
-    void OnClick(object sender, System.EventArgs args)
+    void OnClick(object? sender, EventArgs args)
     {
-        if (effect?.IsDisabled ?? true)
+        if (touchEffect?.IsDisabled ?? true)
             return;
 
         if (!IsAccessibilityMode)
@@ -294,45 +307,55 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
             return;
 
         IsCanceled = true;
-        if (effect?.DisallowTouchThreshold > 0)
-            _group?.Parent?.RequestDisallowInterceptTouchEvent(false);
+        if (touchEffect?.DisallowTouchThreshold > 0)
+            ViewGroup?.Parent?.RequestDisallowInterceptTouchEvent(false);
 
-        effect?.HandleTouch(status);
+        touchEffect?.HandleTouch(status);
 
-        effect?.HandleUserInteraction(TouchInteractionStatus.Completed);
+        touchEffect?.HandleUserInteraction(TouchInteractionStatus.Completed);
 
         EndRipple();
     }
 
-    void StartRipple(float x, float y)
-    {
-        if (effect?.IsDisabled ?? true)
-            return;
+    #region Native Animation
 
-        if (effect.CanExecute && effect.NativeAnimation)
+    private void StartRipple(float x, float y)
+    {
+        if (touchEffect is null || touchEffect.IsDisabled || !touchEffect.NativeAnimation)
         {
-            UpdateRipple();
-            if (rippleView != null)
+            return;
+        }
+
+        if (touchEffect.CanExecute)
+        {
+            UpdateRipple(touchEffect.NativeAnimationColor ?? defaultNativeAnimationColor);
+            if (rippleView is not null)
             {
                 rippleView.Enabled = true;
                 rippleView.BringToFront();
                 ripple?.SetHotspot(x, y);
                 rippleView.Pressed = true;
             }
-            else if (IsForegroundRippleWithTapGestureRecognizer)
+            else if (IsForegroundRippleWithTapGestureRecognizer && View is not null)
             {
                 ripple?.SetHotspot(x, y);
-                _view.Pressed = true;
+                View.Pressed = true;
             }
+        }
+        else if (rippleView is null)
+        {
+            UpdateRipple(Colors.Transparent);
         }
     }
 
     void EndRipple()
     {
-        if (effect?.IsDisabled ?? true)
+        if (touchEffect?.IsDisabled ?? true)
+        {
             return;
+        }
 
-        if (rippleView != null)
+        if (rippleView is not null)
         {
             if (rippleView.Pressed)
             {
@@ -342,66 +365,186 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         }
         else if (IsForegroundRippleWithTapGestureRecognizer)
         {
-            if (_view.Pressed)
-                _view.Pressed = false;
+            if (View.Pressed)
+            {
+                View.Pressed = false;
+            }
         }
     }
 
-    void CreateRipple()
+    private void CreateRipple()
     {
-        var drawable = Build.VERSION.SdkInt >= BuildVersionCodes.M && _group == null
-            ? _view?.Foreground
-            : _view?.Background;
+        if (touchEffect is null)
+        {
+            return;
+        }
 
-        var isEmptyDrawable = Element is Layout || drawable == null;
+        RemoveRipple();
+
+        var drawable = isAtLeastM && ViewGroup == null
+                ? View?.Foreground
+                : View?.Background;
+
+        var isBorderLess = touchEffect.NativeAnimationBorderless;
+        var isEmptyDrawable = Element is Layout || drawable is null;
+        var color = touchEffect.NativeAnimationColor ?? defaultNativeAnimationColor;
 
         if (drawable is RippleDrawable rippleDrawable && rippleDrawable.GetConstantState() is Drawable.ConstantState constantState)
+        {
             ripple = (RippleDrawable)constantState.NewDrawable();
+        }
         else
-            ripple = new RippleDrawable(GetColorStateList(), isEmptyDrawable ? null : drawable, isEmptyDrawable ? new ColorDrawable(Color.White) : null);
+        {
+            var content = isEmptyDrawable || isBorderLess ? null : drawable;
+            var mask = isEmptyDrawable && !isBorderLess ? new ColorDrawable(Color.White) : null;
 
-        UpdateRipple();
+            ripple = new RippleDrawable(GetColorStateList(color), content, mask);
+        }
+
+        UpdateRipple(color);
     }
 
-    void UpdateRipple()
+    private void RemoveRipple()
     {
-        if (effect?.IsDisabled ?? true)
+        if (ripple is null)
+        {
             return;
+        }
 
-        if (effect.NativeAnimationColor == _rippleColor && effect.NativeAnimationRadius == _rippleRadius)
-            return;
+        if (View is not null)
+        {
+            if (isAtLeastM && View.Foreground == ripple)
+            {
+                View.Foreground = null;
+            }
+            else if (View.Background == ripple)
+            {
+                View.Background = null;
+            }
+        }
 
-        _rippleColor = effect.NativeAnimationColor;
-        _rippleRadius = effect.NativeAnimationRadius;
-        ripple?.SetColor(GetColorStateList());
-        if (Build.VERSION.SdkInt >= BuildVersionCodes.M && ripple != null)
-            ripple.Radius = (int)(_view.Context?.Resources?.DisplayMetrics?.Density * effect?.NativeAnimationRadius ?? throw new NullReferenceException());
+        if (rippleView is not null)
+        {
+            rippleView.Foreground = null;
+            rippleView.Background = null;
+        }
+
+        ripple.Dispose();
+        ripple = null;
     }
 
-    ColorStateList GetColorStateList()
+    private void UpdateRipple(MColor color)
     {
-        var nativeAnimationColor = effect?.NativeAnimationColor;
-        nativeAnimationColor ??= defaultNativeAnimationColor;
+        if (touchEffect?.IsDisabled ?? true)
+            return;
+
+        if (color == rippleColor && touchEffect.NativeAnimationRadius == rippleRadius)
+            return;
+
+        rippleColor = color;
+        rippleRadius = touchEffect.NativeAnimationRadius;
+        ripple?.SetColor(GetColorStateList(color));
+        if (isAtLeastM && ripple is not null)
+        {
+            ripple.Radius = (int)(View?.Context?.Resources?.DisplayMetrics?.Density * touchEffect.NativeAnimationRadius ?? throw new NullReferenceException("Could not set ripple radius"));
+        }
+    }
+
+    ColorStateList GetColorStateList(MColor? color)
+    {
+        var animationColor = color;
+        animationColor ??= defaultNativeAnimationColor;
 
         return new ColorStateList(
-            new[] { new int[] { } },
-            new[] { (int)nativeAnimationColor.ToPlatform() });
+            new[] { Array.Empty<int>() },
+            new[] { (int)animationColor.ToPlatform() });
     }
 
-    void OnLayoutChange(object sender, AView.LayoutChangeEventArgs e)
+    private void ApplyRipple()
     {
-        //if (sender is not AView view || (_group as IVisualElementRenderer)?.Element == null || rippleView == null)
-        //    return;
+        if (ripple is null || touchEffect is null)
+        {
+            return;
+        }
 
-        //rippleView.Right = view.Width;
-        //rippleView.Bottom = view.Height;
+        var isBorderless = touchEffect.NativeAnimationBorderless;
+
+        if (ViewGroup is null)
+        {
+            if (isAtLeastM)
+            {
+                View.Foreground = ripple;
+            }
+            else
+            {
+                View.Background = ripple;
+            }
+
+            return;
+        }
+
+        if (rippleView is null)
+        {
+            rippleView = new FrameLayout(ViewGroup.Context ?? throw new NullReferenceException())
+            {
+                LayoutParameters = new ViewGroup.LayoutParams(-1, -1),
+                Clickable = false,
+                Focusable = false,
+                Enabled = false
+            };
+
+            //ViewGroup.AddView(rippleView);
+            //ViewGroup.BringChildToFront(rippleView);
+
+            //System.Diagnostics.Debug.WriteLine(ViewGroup.ChildCount);
+
+            if (Element is ContentView contentView)
+            {
+                var childTouch = TouchEffect.GetFrom(contentView.Content as BindableObject);
+
+                if (childTouch is null)
+                {
+                    ViewGroup.AddView(rippleView);
+                    ViewGroup.BringChildToFront(rippleView);
+                }
+            }
+            else
+            {
+                ViewGroup.AddView(rippleView);
+                ViewGroup.BringChildToFront(rippleView);
+            }
+        }
+
+        ViewGroup.SetClipChildren(!isBorderless);
+
+        if (isBorderless)
+        {
+            rippleView.Background = null;
+            rippleView.Foreground = ripple;
+        }
+        else
+        {
+            rippleView.Foreground = null;
+            rippleView.Background = ripple;
+        }
     }
 
-    sealed class AccessibilityListener : Java.Lang.Object,
-                                         AccessibilityManager.IAccessibilityStateChangeListener,
-                                         AccessibilityManager.ITouchExplorationStateChangeListener
+    void OnLayoutChange(object? sender, AView.LayoutChangeEventArgs e)
     {
-        PlatformTouchEffect platformTouchEffect;
+        if (sender is not AView view || rippleView == null)
+            return;
+
+        rippleView.Right = view.Width;
+        rippleView.Bottom = view.Height;
+    }
+
+    #endregion Native Animation
+
+    private sealed class AccessibilityListener : Java.Lang.Object,
+        AccessibilityManager.IAccessibilityStateChangeListener,
+        AccessibilityManager.ITouchExplorationStateChangeListener
+    {
+        PlatformTouchEffect? platformTouchEffect;
 
         internal AccessibilityListener(PlatformTouchEffect platformTouchEffect)
             => this.platformTouchEffect = platformTouchEffect;
@@ -415,7 +558,9 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         protected override void Dispose(bool disposing)
         {
             if (disposing)
+            {
                 platformTouchEffect = null;
+            }
 
             base.Dispose(disposing);
         }
