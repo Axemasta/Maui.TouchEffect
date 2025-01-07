@@ -1,11 +1,11 @@
-# This repository is being unarchived and updated to target .NET 9 due to a number of breaking changed over in maui which render `TouchBehavior` not fit for use. I will offer the code back to MCT but for the time being this is the fastest way to port apps from .NET 8 to 9!
-# (old) This repository has been archived due to the feature being implemented & merged to the [Maui.CommunityToolkit](https://github.com/CommunityToolkit/Maui/pull/1673) project, please use the `TouchBehavior` in the toolkit instead.
+> This repository has been unarchived and updated to target .NET 9 due to a number of breaking changed over in maui which render `TouchBehavior` not fit for use. The aim is to backport the MCT verion to this library, and then reintroduce it to the MCT. Hopefully when that is done this repository can be archives for good!
 
-# Maui.TouchEffect (Archived)
+
+# Maui.TouchEffect
 
 Maui port of TouchEffect from Xamarin Community Toolkit
 
-> The aim of this library is to provide temporary support for the touch effect without having to take a dependency on [XCT's MauiCompat](https://devblogs.microsoft.com/xamarin/introducing-net-maui-compatibility-for-the-xamarin-community-toolkit/) library. My results of using the compat library have been extremely tempramental, alot of the times the touch effect does not work and due to the packages target framework (net6) & age (2 years old) I figured a new port would be the best option. When [CommunityToolkit.Maui](https://github.com/CommunityToolkit/Maui) eventually releases this feature I will archive this repository.
+> The originalaim of this library is to provide temporary support for the touch effect without having to take a dependency on [XCT's MauiCompat](https://devblogs.microsoft.com/xamarin/introducing-net-maui-compatibility-for-the-xamarin-community-toolkit/) library. My results of using the compat library have been extremely tempramental, alot of the times the touch effect does not work and due to the packages target framework (net6) & age (2 years old) I figured a new port would be the best option. Currently there is `TouchBehavior` available as part of the maui community toolkit however it is not stable due to a number of maui platform bugs regarding behaviors, and the maui team are unwilling to address these issues.
 
 This library supports the following platforms:
 
@@ -17,7 +17,7 @@ This library supports the following platforms:
 | Windows      | ❌         |
 | Tizen        | ❌         |
 
-Due to the temporary nature of this library, I will not be adding support for any platforms I do not personally need. I am open to PR's but MCT are aiming for a NET8 release of TouchEffect so this library will only be kicking around for a matter of weeks/months.
+Currently there is only iOS and Android, I plan to port to Mac Catalyst & Windows and also have as much as the code here mirror MCT as possible. At that point I will PR this back into the MCT and see what happens.
 
 ## Install
 
@@ -50,7 +50,7 @@ Declare xmlns:
 xmlns:touch="http://axemasta.com/schemas/2023/toucheffect"
 ```
 
-Use the same API as XCT:
+The api has been updated to match the naming conventions seen in MCT, this will help porting between the versions easier
 
 ```xml
 <StackLayout
@@ -73,15 +73,17 @@ Use the same API as XCT:
 </StackLayout>
 ```
 
+## Native Animation
 
+I have got this somewhat working again.
 
-See[`TouchEffect Class`](https://learn.microsoft.com/en-us/dotnet/api/xamarin.communitytoolkit.effects.toucheffect?view=xamarin-community-toolkit-sdk) for complete api documentation.
+### iOS
 
-I added a reproduction to hunt an issue i was experiencing on iOS when using in conjunction with the sharpnado collection view. Turns out sharpnado was nothing to do with it and the input transparency was not being set when using a `Border` with a nested `Layout`. Below is the collection view page demonstrating the touch effect on a repeater view.
+This provides extra opacity & touch feedback, its hard to see the value in this feature currently
 
-| iOS                                                          | Android                                                      |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![Touch effect on sharpnado collectionview on ios](assets/touch-effect-ios.gif) | ![Touch effect on sharpnado collectionview on android](assets/touch-effect-android.gif) |
+### Android
+
+This provides ripples on touches. There are some wierd interactions when views have nested `TouchEffect`s so be careful when applying them to complicated views.
 
 ## Acknowlegements
 

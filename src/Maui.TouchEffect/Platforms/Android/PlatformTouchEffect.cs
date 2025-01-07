@@ -332,7 +332,6 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
             if (rippleView is not null)
             {
                 rippleView.Enabled = true;
-                rippleView.BringToFront();
                 ripple?.SetHotspot(x, y);
                 rippleView.Pressed = true;
             }
@@ -438,7 +437,7 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         if (touchEffect?.IsDisabled ?? true)
             return;
 
-        if (color == rippleColor && touchEffect.NativeAnimationRadius == rippleRadius)
+        if (Equals(color, rippleColor) && touchEffect.NativeAnimationRadius == rippleRadius)
             return;
 
         rippleColor = color;
@@ -446,7 +445,7 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         ripple?.SetColor(GetColorStateList(color));
         if (isAtLeastM && ripple is not null)
         {
-            ripple.Radius = (int)(View?.Context?.Resources?.DisplayMetrics?.Density * touchEffect.NativeAnimationRadius ?? throw new NullReferenceException("Could not set ripple radius"));
+            ripple.Radius = (int)(View?.Context?.Resources?.DisplayMetrics?.Density * touchEffect.NativeAnimationRadius ?? 1);
         }
     }
 
@@ -485,7 +484,7 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
 
         if (rippleView is null)
         {
-            rippleView = new FrameLayout(ViewGroup.Context ?? throw new NullReferenceException())
+            rippleView = new FrameLayout(ViewGroup.Context ?? View.Context ?? throw new NullReferenceException())
             {
                 LayoutParameters = new ViewGroup.LayoutParams(-1, -1),
                 Clickable = false,
@@ -493,38 +492,33 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
                 Enabled = false
             };
 
-            //ViewGroup.AddView(rippleView);
-            //ViewGroup.BringChildToFront(rippleView);
+            var rippleAtFront = !(ViewGroup.ChildCount > 0);
 
-            //System.Diagnostics.Debug.WriteLine(ViewGroup.ChildCount);
+            ViewGroup.AddView(rippleView);
 
-            if (Element is ContentView contentView)
+            if (!rippleAtFront)
             {
-                var childTouch = TouchEffect.GetFrom(contentView.Content as BindableObject);
-
-                if (childTouch is null)
-                {
-                    ViewGroup.AddView(rippleView);
-                    ViewGroup.BringChildToFront(rippleView);
-                }
-            }
-            else
-            {
-                ViewGroup.AddView(rippleView);
-                ViewGroup.BringChildToFront(rippleView);
+                var child = ViewGroup.GetChildAt(0);
+                child?.BringToFront();
             }
         }
 
         ViewGroup.SetClipChildren(!isBorderless);
 
-        if (isBorderless)
+        if (!isBorderless)
         {
             rippleView.Background = null;
-            rippleView.Foreground = ripple;
+            if (isAtLeastM)
+            {
+                rippleView.Foreground = ripple;
+            }
         }
         else
         {
-            rippleView.Foreground = null;
+            if (isAtLeastM)
+            {
+                rippleView.Foreground = null;
+            }
             rippleView.Background = ripple;
         }
     }

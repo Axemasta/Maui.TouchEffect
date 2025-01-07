@@ -2,14 +2,14 @@
 
 <ContentPage
     x:Class="Maui.TouchEffect.Sample.Pages.TouchEffectPage"
+    x:DataType="viewmodels:TouchEffectViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:touch="http://axemasta.com/schemas/2023/toucheffect"
     xmlns:viewmodels="clr-namespace:Maui.TouchEffect.Sample.ViewModels"
-    x:DataType="viewmodels:TouchEffectViewModel">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
     <ContentPage.Resources>
-        <Style x:Key="GridRowContentStyle" TargetType="StackLayout">
+        <Style TargetType="StackLayout" x:Key="GridRowContentStyle">
             <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
             <Setter Property="VerticalOptions" Value="CenterAndExpand" />
             <Setter Property="Spacing" Value="10" />
@@ -41,22 +41,22 @@
                 <Label Text="Scale | Fade | Animated" />
 
                 <StackLayout
+                    HorizontalOptions="CenterAndExpand"
+                    Orientation="Horizontal"
                     touch:TouchEffect.Command="{Binding TouchCommand}"
                     touch:TouchEffect.DefaultAnimationDuration="250"
                     touch:TouchEffect.DefaultAnimationEasing="{x:Static Easing.CubicInOut}"
                     touch:TouchEffect.PressedOpacity="0.6"
-                    touch:TouchEffect.PressedScale="0.8"
-                    HorizontalOptions="CenterAndExpand"
-                    Orientation="Horizontal">
+                    touch:TouchEffect.PressedScale="0.8">
                     <BoxView
+                        Color="Gold"
                         HeightRequest="20"
-                        WidthRequest="20"
-                        Color="Gold" />
+                        WidthRequest="20" />
                     <Label Text="The entire layout receives touches" />
                     <BoxView
+                        Color="Gold"
                         HeightRequest="20"
-                        WidthRequest="20"
-                        Color="Gold" />
+                        WidthRequest="20" />
                 </StackLayout>
             </StackLayout>
 
@@ -70,16 +70,16 @@
                     Text="{Binding LongPressCount, StringFormat='Long press count: {0}'}" />
 
                 <StackLayout
+                    BackgroundColor="Black"
+                    HorizontalOptions="CenterAndExpand"
+                    Orientation="Horizontal"
                     Padding="20"
                     touch:TouchEffect.Command="{Binding TouchCommand}"
                     touch:TouchEffect.HoveredScale="1.2"
                     touch:TouchEffect.LongPressCommand="{Binding LongPressCommand}"
                     touch:TouchEffect.LongPressDuration="3000"
                     touch:TouchEffect.NativeAnimation="True"
-                    touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless}"
-                    BackgroundColor="Black"
-                    HorizontalOptions="CenterAndExpand"
-                    Orientation="Horizontal">
+                    touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless}">
                     <Label
                         FontSize="Large"
                         Text="TITLE"
@@ -92,15 +92,15 @@
                 <Label Text="Color | Rotation | Pulse | Animated" />
 
                 <StackLayout
+                    HorizontalOptions="CenterAndExpand"
+                    Orientation="Horizontal"
                     Padding="20"
-                    touch:TouchEffect.DefaultAnimationDuration="500"
                     touch:TouchEffect.Command="{Binding TouchCommand}"
+                    touch:TouchEffect.DefaultAnimationDuration="500"
                     touch:TouchEffect.DefaultBackgroundColor="Gold"
                     touch:TouchEffect.PressedBackgroundColor="Orange"
                     touch:TouchEffect.PressedRotation="15"
-                    touch:TouchEffect.PulseCount="2"
-                    HorizontalOptions="CenterAndExpand"
-                    Orientation="Horizontal">
+                    touch:TouchEffect.PulseCount="2">
                     <Label
                         FontSize="Large"
                         Text="TITLE"
@@ -114,12 +114,12 @@
 
                 <Label Text="Button | ImageButton" />
 
-                <Button touch:TouchEffect.Command="{Binding TouchCommand}" Text="Button" />
+                <Button Text="Button" touch:TouchEffect.Command="{Binding TouchCommand}" />
 
                 <ImageButton
-                    touch:TouchEffect.Command="{Binding TouchCommand}"
                     HeightRequest="150"
-                    Source="xamarinstore.jpg" />
+                    Source="xamarinstore.jpg"
+                    touch:TouchEffect.Command="{Binding TouchCommand}" />
 
             </StackLayout>
 
@@ -128,19 +128,19 @@
                 <Label Text="Nested effect" />
 
                 <ContentView
+                    BackgroundColor="Purple"
+                    HorizontalOptions="CenterAndExpand"
                     Padding="50"
                     touch:TouchEffect.Command="{Binding ParentPressedCommand}"
                     touch:TouchEffect.NativeAnimation="True"
-                    touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless}"
-                    BackgroundColor="Purple"
-                    HorizontalOptions="CenterAndExpand">
-                    <BoxView
-                        touch:TouchEffect.Command="{Binding ChildPressedCommand}"
-                        touch:TouchEffect.NativeAnimation="True"
-                        touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless}"
+                    touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless}">
+                    <ContentView
+                        BackgroundColor="Gold"
                         HeightRequest="100"
                         WidthRequest="100"
-                        Color="Gold" />
+                        touch:TouchEffect.Command="{Binding ChildPressedCommand}"
+                        touch:TouchEffect.NativeAnimation="True"
+                        touch:TouchEffect.NativeAnimationBorderless="{Binding NativeAnimationBorderless}" />
                 </ContentView>
             </StackLayout>
 
