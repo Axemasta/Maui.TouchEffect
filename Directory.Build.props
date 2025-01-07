@@ -11,13 +11,17 @@
 
         <NetVersion>9</NetVersion>
 
+        <StandardTargetFramework>net$(NetVersion).0</StandardTargetFramework>
         <IosTargetFramework>net$(NetVersion).0-ios</IosTargetFramework>
         <AndroidTargetFramework>net$(NetVersion).0-android</AndroidTargetFramework>
         <MacTargetFramework>net$(NetVersion).0-maccatalyst</MacTargetFramework>
         <WindowsTargetFramework>net$(NetVersion).0-windows10.0.19041.0</WindowsTargetFramework>
 
         <MauiPlatformTargetFrameworks>$(AndroidTargetFramework);$(IosTargetFramework);$(MacTargetFramework)</MauiPlatformTargetFrameworks>
-        <MauiPlatformTargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(StandardTargetFramework);$(AndroidTargetFramework);$(IosTargetFramework);$(MacTargetFramework);$(WindowsTargetFramework)</MauiPlatformTargetFrameworks>
+        <MauiPlatformTargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(AndroidTargetFramework);$(IosTargetFramework);$(MacTargetFramework);$(WindowsTargetFramework)</MauiPlatformTargetFrameworks>
+
+        <LibraryPlatformTargetFrameworks>$(StandardTargetFramework);$(AndroidTargetFramework);$(IosTargetFramework);$(MacTargetFramework)</LibraryPlatformTargetFrameworks>
+        <LibraryPlatformTargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(StandardTargetFramework);$(AndroidTargetFramework);$(IosTargetFramework);$(MacTargetFramework);$(WindowsTargetFramework)</LibraryPlatformTargetFrameworks>
     </PropertyGroup>
 
     <PropertyGroup>
