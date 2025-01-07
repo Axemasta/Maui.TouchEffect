@@ -16,7 +16,10 @@ public static class AppBuilderExtensions
 #if ANDROID
 			effects.Add<TouchEffect, PlatformTouchEffect>();
 #endif
-		});
+#if WINDOWS
+            effects.Add<TouchEffect, PlatformTouchEffect>();
+#endif
+        });
 
 		return builder;
 	}
