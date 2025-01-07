@@ -1,12 +1,8 @@
 name: Maui.TouchEffect CI
 
 on:
-  pull_request:
-    branches: [ "main" ]
-    paths:
-      - 'src/**'
   push:
-    branches: [ "main", "actions" ]
+    branches: [ "main" ]
     paths:
       - 'src/**'
       - 'version.json'
