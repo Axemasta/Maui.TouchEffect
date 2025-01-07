@@ -3,6 +3,8 @@
 
 # Maui.TouchEffect
 
+[![NuGet Shield](https://img.shields.io/nuget/v/Axemasta.Maui.TouchEffect)](https://www.nuget.org/packages/Axemasta.Maui.TouchEffect/)
+
 Maui port of TouchEffect from Xamarin Community Toolkit
 
 > The originalaim of this library is to provide temporary support for the touch effect without having to take a dependency on [XCT's MauiCompat](https://devblogs.microsoft.com/xamarin/introducing-net-maui-compatibility-for-the-xamarin-community-toolkit/) library. My results of using the compat library have been extremely tempramental, alot of the times the touch effect does not work and due to the packages target framework (net6) & age (2 years old) I figured a new port would be the best option. Currently there is `TouchBehavior` available as part of the maui community toolkit however it is not stable due to a number of maui platform bugs regarding behaviors, and the maui team are unwilling to address these issues.

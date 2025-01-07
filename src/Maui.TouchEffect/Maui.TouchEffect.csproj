@@ -12,17 +12,29 @@
         <NeutralLanguage>en</NeutralLanguage>
         <RepositoryUrl>https://github.com/Axemasta/XCT.Maui.TouchEffect</RepositoryUrl>
         <PackageProjectUrl>https://github.com/Axemasta/XCT.Maui.TouchEffect</PackageProjectUrl>
-        <AssemblyName>Maui.TouchEffect</AssemblyName>
+        <AssemblyName>Axemasta.Maui.TouchEffect</AssemblyName>
         <RootNamespace>Maui.TouchEffect</RootNamespace>
-        <PackageId>Maui.TouchEffect</PackageId>
+        <PackageId>Axemasta.Maui.TouchEffect</PackageId>
         <Summary>Maui port of XCT TouchEffect</Summary>
-        <PackageTags>maui,xct,xamarin,community,toolkit,touch,effect,toucheffect</PackageTags>
-        <Title>Maui.TouchEffect</Title>
-        <Description>Maui port of XCT TouchEffect</Description>
+        <PackageTags>maui,xct,xamarin,community,toolkit,touch,effect,toucheffect,mct,touch,behavior,touchbehavior</PackageTags>
+        <Title>Axemasta.Maui.TouchEffect</Title>
+        <Description>Maui port of XCT/MCT TouchEffect/TouchBehavior</Description>
+        <Authors>Axemasta</Authors>
+        <Owners>Axemasta</Owners>
+        <NeutralLanguage>en</NeutralLanguage>
+        <RepositoryUrl>https://github.com/Axemasta/Maui.TouchEffect</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <PackageProjectUrl>https://github.com/Axemasta/Maui.TouchEffect</PackageProjectUrl>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>
+        <None Include="..\..\README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
         <PackageReference Include="Nerdbank.GitVersioning" Version="3.6.133">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
