@@ -41,6 +41,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Setup NuGet.exe for use with actions
+      uses: NuGet/setup-nuget@v2.0.1
+            
     - name: Download artifacts
       id: download-artifact
       uses: actions/download-artifact@v4
