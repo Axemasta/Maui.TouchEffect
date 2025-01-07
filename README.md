@@ -16,10 +16,10 @@ This library supports the following platforms:
 | iOS          | ✅         |
 | Android      | ✅         |
 | Mac Catalyst | ❌         |
-| Windows      | ❌         |
+| Windows      | ✅         |
 | Tizen        | ❌         |
 
-Currently there is only iOS and Android, I plan to port to Mac Catalyst & Windows and also have as much as the code here mirror MCT as possible. At that point I will PR this back into the MCT and see what happens.
+> Mac Catalyst will be supported in the near future, I just need to enable the iOS code to compile for mac and we're golden
 
 ## Install
 
