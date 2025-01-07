@@ -53,7 +53,7 @@ jobs:
       working-directory: Artifacts/
       id: process-version
       run: |
-        $Artifact = Get-ChildItem -Recurse | Where-Object { $_.Name.EndsWith('.nupkg') -and $_.Name.StartsWith('Maui.TouchEffect') } | Select-Object -First 1
+        $Artifact = Get-ChildItem -Recurse | Where-Object { $_.Name.EndsWith('.nupkg') -and $_.Name.StartsWith('Axemasta.Maui.TouchEffect') } | Select-Object -First 1
         $ArtifactName = $Artifact.Name
         $Pattern = '\b\d+\.\d+\.\d+(-\w+)?\b'
 
