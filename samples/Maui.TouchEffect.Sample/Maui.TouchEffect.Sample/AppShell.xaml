@@ -3,18 +3,30 @@
     x:Class="Maui.TouchEffect.Sample.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Maui.TouchEffect.Sample.Controls"
     xmlns:pages="clr-namespace:Maui.TouchEffect.Sample.Pages"
-    Shell.FlyoutBehavior="Flyout"
-    Title="Maui.TouchEffect.Sample">
+    Title="Maui.TouchEffect.Sample"
+    Shell.FlyoutBehavior="Flyout">
 
     <ShellContent
+        Title="Touch Effect"
         ContentTemplate="{DataTemplate pages:TouchEffectPage}"
-        Route="TouchEffectPage"
-        Title="Touch Effect" />
+        Route="TouchEffectPage" />
 
     <ShellContent
-        ContentTemplate="{DataTemplate pages:SharpnadoPage}"
-        Route="SharpnadoPage"
-        Title="Sharpnado Page" />
+        Title="Collections"
+        ContentTemplate="{DataTemplate pages:CollectionPage}"
+        Route="CollectionPage" />
+
+    <ShellContent
+        Title="Images"
+        ContentTemplate="{DataTemplate pages:ImagePage}"
+        Route="ImagePage" />
+
+    <Shell.FlyoutFooter>
+        <Grid Padding="20">
+            <controls:ThemeSwitchButton HorizontalOptions="Center" VerticalOptions="Center" />
+        </Grid>
+    </Shell.FlyoutFooter>
 
 </Shell>

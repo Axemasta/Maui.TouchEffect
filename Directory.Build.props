@@ -1,11 +1,31 @@
 <Project>
+
+    <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
     <PropertyGroup>
-        <IosTargetFramework>net8.0-ios</IosTargetFramework>
-        <AndroidTargetFramework>net8.0-android</AndroidTargetFramework>
-        <MacTargetFramework>net8.0-maccatalyst</MacTargetFramework>
-        <WindowsTargetFramework>net8.0-windows10.0.19041.0</WindowsTargetFramework>
+        <MauiVersion>9.0.21</MauiVersion>
+
+        <NetVersion>9</NetVersion>
+
+        <IosTargetFramework>net$(NetVersion).0-ios</IosTargetFramework>
+        <AndroidTargetFramework>net$(NetVersion).0-android</AndroidTargetFramework>
+        <MacTargetFramework>net$(NetVersion).0-maccatalyst</MacTargetFramework>
+        <WindowsTargetFramework>net$(NetVersion).0-windows10.0.19041.0</WindowsTargetFramework>
 
         <MauiPlatformTargetFrameworks>$(AndroidTargetFramework);$(IosTargetFramework);$(MacTargetFramework)</MauiPlatformTargetFrameworks>
-        <MauiPlatformTargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(AndroidTargetFramework);$(IosTargetFramework);$(MacTargetFramework);$(WindowsTargetFramework)</MauiPlatformTargetFrameworks>
+        <MauiPlatformTargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(StandardTargetFramework);$(AndroidTargetFramework);$(IosTargetFramework);$(MacTargetFramework);$(WindowsTargetFramework)</MauiPlatformTargetFrameworks>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
+    </PropertyGroup>
+
+    <ItemGroup Condition=" $(UseMaui) == 'true' ">
+        <PackageVersion Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)"/>
+        <PackageVersion Include="Microsoft.Maui.Controls" Version="$(MauiVersion)"/>
+    </ItemGroup>
 </Project>
