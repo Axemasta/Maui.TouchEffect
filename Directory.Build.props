@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <MauiVersion>9.0.21</MauiVersion>
+        <MauiVersion>9.0.120</MauiVersion>
 
         <NetVersion>9</NetVersion>
 
