@@ -6,7 +6,9 @@
         <SingleProject>true</SingleProject>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+    </PropertyGroup>
 
+    <PropertyGroup Label="NuGet">
         <Authors>Axemasta</Authors>
         <Owners>Axemasta</Owners>
         <NeutralLanguage>en</NeutralLanguage>
@@ -28,12 +30,8 @@
         <PackageProjectUrl>https://github.com/Axemasta/Maui.TouchEffect</PackageProjectUrl>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-        <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
-        <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+        <IncludeSymbols>True</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <ItemGroup>
