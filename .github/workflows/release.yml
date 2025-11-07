@@ -27,7 +27,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: drop
-        path: src/**/*.nupkg
+        path: |
+          src/**/*.nupkg
+          src/**/*.snupkg
 
   release:
     needs: build
@@ -36,6 +38,7 @@ jobs:
       IS_PRERELEASE: false
       RELEASE_TITLE: v0.0.1
       VERSION_NAME: 0.0.1
+      ARTIFACTS: 'Artifacts/**/*.nupkg'
     steps:
     - uses: actions/checkout@v3
             
@@ -93,7 +96,7 @@ jobs:
     - uses: ncipollo/release-action@main
       name: Create Release
       with:
-        artifacts: Artifacts/**/*.nupkg
+        artifacts: 'Artifacts/**/*.nupkg,Artifacts/**/*.snupkg'
         artifactErrorsFailBuild: true
         draft: true
         generateReleaseNotes: true
@@ -103,4 +106,4 @@ jobs:
         body: "TODO"
 
     - name: Publish NuGet
-      run: nuget push Artifacts/**/*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{ secrets.NUGET_API_KEY }} -SkipDuplicate
+      run: nuget push ${{ env.ARTIFACTS }} -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{ secrets.NUGET_API_KEY }} -SkipDuplicate
