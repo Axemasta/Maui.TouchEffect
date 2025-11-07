@@ -3,7 +3,10 @@ using System.Globalization;
 
 namespace Maui.TouchEffect.Converters;
 
-internal class TimeSpanMillisecondTypeConverter : TypeConverter
+/// <summary>
+/// A <see cref="TypeConverter"/> specific to converting a string value to a <see cref="TimeSpan"/>.
+/// </summary>
+public sealed class TimeSpanMillisecondTypeConverter : TypeConverter
 {
     public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
             => sourceType == typeof(string);
