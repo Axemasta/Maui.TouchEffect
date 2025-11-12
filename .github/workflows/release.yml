@@ -19,6 +19,8 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         global-json-file: global.json
+    - name: Install Maui Workloads
+      run: dotnet workload install maui --source https://api.nuget.org/v3/index.json
     - name: Restore dependencies
       run: dotnet restore
     - name: Build

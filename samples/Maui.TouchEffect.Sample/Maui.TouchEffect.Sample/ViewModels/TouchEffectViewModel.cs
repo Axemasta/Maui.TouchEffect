@@ -1,9 +1,5 @@
-﻿using System.Windows.Input;
-
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
-using Maui.TouchEffect.Sample.ObjectModel;
 
 namespace Maui.TouchEffect.Sample.ViewModels;
 
@@ -33,12 +29,12 @@ public partial class TouchEffectViewModel : ObservableObject
     [RelayCommand]
     private async Task ChildPressed()
     {
-        await Shell.Current.DisplayAlert("Child clicked", null, "Ok");
+        await Shell.Current.DisplayAlertAsync("Child clicked", null, "Ok");
     }
 
     [RelayCommand]
     private async Task ParentPressed()
     {
-        await Shell.Current.DisplayAlert("Parent clicked", null, "Ok");
+        await Shell.Current.DisplayAlertAsync("Parent clicked", null, "Ok");
     }
 }

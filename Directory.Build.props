@@ -7,9 +7,8 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <MauiVersion>9.0.120</MauiVersion>
-
-        <NetVersion>9</NetVersion>
+        <MauiVersion>10.0.10</MauiVersion>
+        <NetVersion>10</NetVersion>
 
         <StandardTargetFramework>net$(NetVersion).0</StandardTargetFramework>
         <IosTargetFramework>net$(NetVersion).0-ios</IosTargetFramework>
@@ -29,7 +28,6 @@
     </PropertyGroup>
 
     <ItemGroup Condition=" $(UseMaui) == 'true' ">
-        <PackageVersion Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)"/>
         <PackageVersion Include="Microsoft.Maui.Controls" Version="$(MauiVersion)"/>
     </ItemGroup>
 </Project>

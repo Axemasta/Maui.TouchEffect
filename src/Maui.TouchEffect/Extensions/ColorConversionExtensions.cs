@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace Maui.TouchEffect.Extensions;
+﻿namespace Maui.TouchEffect.Extensions;
 
 internal static class ColorConversionExtensions
 {

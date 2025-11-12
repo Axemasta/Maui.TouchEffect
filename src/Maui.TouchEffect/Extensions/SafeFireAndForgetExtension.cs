@@ -1,4 +1,4 @@
-namespace MauiTouchEffect.Extensions;
+namespace Maui.TouchEffect.Extensions;
 
 /// <summary>
 /// Extension methods for System.Threading.Tasks.Task and System.Threading.Tasks.ValueTask

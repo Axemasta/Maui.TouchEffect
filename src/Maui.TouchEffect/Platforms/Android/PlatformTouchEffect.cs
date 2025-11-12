@@ -455,8 +455,8 @@ public class PlatformTouchEffect : Microsoft.Maui.Controls.Platform.PlatformEffe
         animationColor ??= defaultNativeAnimationColor;
 
         return new ColorStateList(
-            new[] { Array.Empty<int>() },
-            new[] { (int)animationColor.ToPlatform() });
+            [[]],
+            [animationColor.ToPlatform()]);
     }
 
     private void ApplyRipple()

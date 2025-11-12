@@ -1,18 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
+    Padding="10"
     x:Class="Maui.TouchEffect.Sample.Pages.CollectionPage"
+    x:DataType="viewmodels:GameDevelopersViewModel"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:Maui.TouchEffect.Sample.Models"
-    xmlns:touch="http://axemasta.com/schemas/2023/toucheffect"
     xmlns:viewmodels="clr-namespace:Maui.TouchEffect.Sample.ViewModels"
     xmlns:views="clr-namespace:Maui.TouchEffect.Sample.Views"
-    Padding="10"
-    x:DataType="viewmodels:GameDevelopersViewModel">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
     <ContentPage.Resources>
-        <DataTemplate x:Key="DisplayItemCard" x:DataType="models:GameDeveloperDisplayItem">
-            <views:GameDeveloperDisplayCard Margin="0" HeightRequest="150" />
+        <DataTemplate x:DataType="models:GameDeveloperDisplayItem" x:Key="DisplayItemCard">
+            <views:GameDeveloperDisplayCard HeightRequest="150" Margin="0" />
         </DataTemplate>
     </ContentPage.Resources>
     <ContentPage.Content>
