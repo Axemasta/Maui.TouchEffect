@@ -1,7 +1,7 @@
 using CoreGraphics;
 using Foundation;
 using Maui.TouchEffect.Enums;
-using MauiTouchEffect.Extensions;
+using Maui.TouchEffect.Extensions;
 using Microsoft.Maui.Controls.Platform;
 using Microsoft.Maui.Platform;
 using UIKit;

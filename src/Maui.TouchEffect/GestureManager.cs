@@ -457,7 +457,7 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
         VisualStateManager.GoToState(visualElement, state);
     }
 
-    private static Task? SetOpacity(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
+    private static Task SetOpacity(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
         var normalOpacity = sender.DefaultOpacity;
         var pressedOpacity = sender.PressedOpacity;
@@ -489,7 +489,9 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
             return Task.FromResult(true);
         }
 
-        return element?.FadeTo(opacity, (uint)Abs(duration), easing);
+        return element is not null 
+            ? element.FadeToAsync(opacity, (uint)Abs(duration), easing)
+            : Task.FromResult(false);
     }
 
     private Task SetScale(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
@@ -592,7 +594,7 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
             return Task.FromResult(true);
         }
 
-        return element?.TranslateTo(translationX, translationY, (uint)Abs(duration), easing) ?? Task.FromResult(false);
+        return element?.TranslateToAsync(translationX, translationY, (uint)Abs(duration), easing) ?? Task.FromResult(false);
     }
 
     private static Task SetRotation(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
@@ -627,7 +629,7 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
             return Task.FromResult(true);
         }
 
-        return element?.RotateTo(rotation, (uint)Abs(duration), easing) ?? Task.FromResult(false);
+        return element?.RotateToAsync(rotation, (uint)Abs(duration), easing) ?? Task.FromResult(false);
     }
 
     private static Task SetRotationX(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
@@ -662,7 +664,7 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
             return Task.FromResult(true);
         }
 
-        return element?.RotateXTo(rotationX, (uint)Abs(duration), easing) ?? Task.FromResult(false);
+        return element?.RotateXToAsync(rotationX, (uint)Abs(duration), easing) ?? Task.FromResult(false);
     }
 
     private static Task SetRotationY(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
@@ -697,7 +699,7 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
             return Task.FromResult(true);
         }
 
-        return element?.RotateYTo(rotationY, (uint)Abs(duration), easing) ?? Task.FromResult(false);
+        return element?.RotateYToAsync(rotationY, (uint)Abs(duration), easing) ?? Task.FromResult(false);
     }
 
     private async Task<bool> SetBackgroundColor(TouchEffect touchEffect, TouchState touchState, HoverState hoverState, TimeSpan duration, Easing easing)
@@ -820,6 +822,8 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
         }
 
         duration = Max(duration, 0);
+
+        easing ??= Easing.Default;
 
         return Task.WhenAll(
             _animationTaskFactory?.Invoke(sender, touchState, hoverState, duration, easing, token) ?? Task.FromResult(true),

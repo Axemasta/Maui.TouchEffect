@@ -31,7 +31,7 @@ internal static partial class ColorAnimationExtensions
                 { 0, 1, GetBlueTransformAnimation(element, color.Blue) },
                 { 0, 1, GetAlphaTransformAnimation(element, color.Alpha) },
             }
-            .Commit(element, nameof(BackgroundColorTo), rate, length, easing, (d, b) => animationCompletionSource.SetResult(true));
+            .Commit(element, nameof(BackgroundColorTo), rate, length, easing, (_, _) => animationCompletionSource.SetResult(true));
         }
         catch (ArgumentException aex)
         {

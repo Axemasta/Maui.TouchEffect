@@ -1,6 +1,5 @@
 ﻿using Maui.TouchEffect.Enums;
-
-using MauiTouchEffect.Extensions;
+using Maui.TouchEffect.Extensions;
 
 namespace Maui.TouchEffect;
 public partial class TouchEffect : IDisposable
