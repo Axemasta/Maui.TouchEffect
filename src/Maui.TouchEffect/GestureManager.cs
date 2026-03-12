@@ -8,7 +8,7 @@ namespace Maui.TouchEffect;
 
 internal sealed class GestureManager : IDisposable, IAsyncDisposable
 {
-    private Color? defaultBackgroundColor;
+    private Color? fallbackBackgroundColor;
 
     CancellationTokenSource? longPressTokenSource, animationTokenSource;
 
@@ -251,7 +251,7 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
     internal void Reset()
     {
         SetCustomAnimationTask(null);
-        defaultBackgroundColor = default;
+        fallbackBackgroundColor = default;
     }
 
     internal void AbortAnimations(TouchEffect touchEffect)
@@ -357,11 +357,11 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
             return;
         }
 
-        var normalBackgroundImageSource = touchEffect.DefaultImageSource;
+        var defaultBackgroundImageSource = touchEffect.DefaultImageSource;
         var pressedBackgroundImageSource = touchEffect.PressedImageSource;
         var hoveredBackgroundImageSource = touchEffect.HoveredImageSource;
 
-        if (normalBackgroundImageSource == null &&
+        if (defaultBackgroundImageSource == null &&
             pressedBackgroundImageSource == null &&
             hoveredBackgroundImageSource == null)
         {
@@ -459,18 +459,18 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
 
     private static Task SetOpacity(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
-        var normalOpacity = sender.DefaultOpacity;
+        var defaultOpacity = sender.DefaultOpacity;
         var pressedOpacity = sender.PressedOpacity;
         var hoveredOpacity = sender.HoveredOpacity;
 
-        if (Abs(normalOpacity - 1) <= double.Epsilon &&
+        if (Abs(defaultOpacity - 1) <= double.Epsilon &&
             Abs(pressedOpacity - 1) <= double.Epsilon &&
             Abs(hoveredOpacity - 1) <= double.Epsilon)
         {
             return Task.FromResult(false);
         }
 
-        var opacity = normalOpacity;
+        var opacity = defaultOpacity;
 
         if (touchState == TouchState.Pressed)
         {
@@ -496,18 +496,18 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
 
     private Task SetScale(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
-        var normalScale = sender.DefaultScale;
+        var defaultScale = sender.DefaultScale;
         var pressedScale = sender.PressedScale;
         var hoveredScale = sender.HoveredScale;
 
-        if (Abs(normalScale - 1) <= double.Epsilon &&
+        if (Abs(defaultScale - 1) <= double.Epsilon &&
             Abs(pressedScale - 1) <= double.Epsilon &&
             Abs(hoveredScale - 1) <= double.Epsilon)
         {
             return Task.FromResult(false);
         }
 
-        var scale = normalScale;
+        var scale = defaultScale;
 
         if (touchState == TouchState.Pressed)
         {
@@ -546,26 +546,26 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
 
     private static Task SetTranslation(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
-        var normalTranslationX = sender.DefaultTranslationX;
+        var defaultTranslationX = sender.DefaultTranslationX;
         var pressedTranslationX = sender.PressedTranslationX;
         var hoveredTranslationX = sender.HoveredTranslationX;
 
-        var normalTranslationY = sender.DefaultTranslationY;
+        var defaultTranslationY = sender.DefaultTranslationY;
         var pressedTranslationY = sender.PressedTranslationY;
         var hoveredTranslationY = sender.HoveredTranslationY;
 
-        if (Abs(normalTranslationX) <= double.Epsilon
+        if (Abs(defaultTranslationX) <= double.Epsilon
             && Abs(pressedTranslationX) <= double.Epsilon
             && Abs(hoveredTranslationX) <= double.Epsilon
-            && Abs(normalTranslationY) <= double.Epsilon
+            && Abs(defaultTranslationY) <= double.Epsilon
             && Abs(pressedTranslationY) <= double.Epsilon
             && Abs(hoveredTranslationY) <= double.Epsilon)
         {
             return Task.FromResult(false);
         }
 
-        var translationX = normalTranslationX;
-        var translationY = normalTranslationY;
+        var translationX = defaultTranslationX;
+        var translationY = defaultTranslationY;
 
         if (touchState == TouchState.Pressed)
         {
@@ -599,18 +599,18 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
 
     private static Task SetRotation(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
-        var normalRotation = sender.DefaultRotation;
+        var defaultRotation = sender.DefaultRotation;
         var pressedRotation = sender.PressedRotation;
         var hoveredRotation = sender.HoveredRotation;
 
-        if (Abs(normalRotation) <= double.Epsilon
+        if (Abs(defaultRotation) <= double.Epsilon
             && Abs(pressedRotation) <= double.Epsilon
             && Abs(hoveredRotation) <= double.Epsilon)
         {
             return Task.FromResult(false);
         }
 
-        var rotation = normalRotation;
+        var rotation = defaultRotation;
 
         if (touchState == TouchState.Pressed)
         {
@@ -634,18 +634,18 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
 
     private static Task SetRotationX(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
-        var normalRotationX = sender.DefaultRotationX;
+        var defaultRotationX = sender.DefaultRotationX;
         var pressedRotationX = sender.PressedRotationX;
         var hoveredRotationX = sender.HoveredRotationX;
 
-        if (Abs(normalRotationX) <= double.Epsilon &&
+        if (Abs(defaultRotationX) <= double.Epsilon &&
             Abs(pressedRotationX) <= double.Epsilon &&
             Abs(hoveredRotationX) <= double.Epsilon)
         {
             return Task.FromResult(false);
         }
 
-        var rotationX = normalRotationX;
+        var rotationX = defaultRotationX;
 
         if (touchState == TouchState.Pressed)
         {
@@ -669,18 +669,18 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
 
     private static Task SetRotationY(TouchEffect sender, TouchState touchState, HoverState hoverState, int duration, Easing easing)
     {
-        var normalRotationY = sender.DefaultRotationY;
+        var defaultRotationY = sender.DefaultRotationY;
         var pressedRotationY = sender.PressedRotationY;
         var hoveredRotationY = sender.HoveredRotationY;
 
-        if (Abs(normalRotationY) <= double.Epsilon &&
+        if (Abs(defaultRotationY) <= double.Epsilon &&
             Abs(pressedRotationY) <= double.Epsilon &&
             Abs(hoveredRotationY) <= double.Epsilon)
         {
             return Task.FromResult(false);
         }
 
-        var rotationY = normalRotationY;
+        var rotationY = defaultRotationY;
 
         if (touchState == TouchState.Pressed)
         {
@@ -709,12 +709,12 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
             return false;
         }
 
-        var normalBackgroundColor = touchEffect.DefaultBackgroundColor;
+        var defaultBackgroundColor = touchEffect.DefaultBackgroundColor;
         var pressedBackgroundColor = touchEffect.PressedBackgroundColor;
         var hoveredBackgroundColor = touchEffect.HoveredBackgroundColor;
 
         if (touchEffect.Element == null
-            || normalBackgroundColor is null
+            || defaultBackgroundColor is null
             && pressedBackgroundColor is null
             && hoveredBackgroundColor is null)
         {
@@ -723,9 +723,9 @@ internal sealed class GestureManager : IDisposable, IAsyncDisposable
 
         var element = touchEffect.Element;
 
-        defaultBackgroundColor ??= element.BackgroundColor ?? normalBackgroundColor;
+        fallbackBackgroundColor ??= element.BackgroundColor ?? defaultBackgroundColor;
 
-        var updatedBackgroundColor = defaultBackgroundColor;
+        var updatedBackgroundColor = fallbackBackgroundColor;
 
         switch (touchState, hoverState)
         {

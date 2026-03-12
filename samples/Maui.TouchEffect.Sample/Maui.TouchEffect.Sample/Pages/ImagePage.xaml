@@ -14,8 +14,8 @@
 
     <ContentPage.Resources>
         <Style x:Key="GridRowContentStyle" TargetType="StackLayout">
-            <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
-            <Setter Property="VerticalOptions" Value="CenterAndExpand" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
             <Setter Property="Spacing" Value="10" />
         </Style>
     </ContentPage.Resources>
@@ -24,8 +24,8 @@
 
         <StackLayout Orientation="Horizontal">
             <Label
-                FontSize="Title"
-                HorizontalOptions="FillAndExpand"
+                FontSize="{StaticResource FontSizeTitle}"
+                HorizontalOptions="Fill"
                 Text="NativeAnimationBorderless" />
             <Switch IsToggled="{Binding NativeAnimationBorderless}" />
         </StackLayout>
