@@ -41,6 +41,11 @@ jobs:
       RELEASE_TITLE: v0.0.1
       VERSION_NAME: 0.0.1
       ARTIFACTS: 'Artifacts/**/*.nupkg'
+      
+    permissions:
+      id-token: write 
+      contents: write
+
     steps:
     - uses: actions/checkout@v3
             
@@ -107,5 +112,12 @@ jobs:
         prerelease: ${{ env.IS_PRERELEASE }}
         body: "TODO"
 
+    - name: NuGet login (OIDC - temp API key)
+      uses: NuGet/login@v1
+      id: login
+      with:
+        user: Axemasta
+
     - name: Publish NuGet
-      run: nuget push ${{ env.ARTIFACTS }} -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{ secrets.NUGET_API_KEY }} -SkipDuplicate
+      run: |
+        dotnet nuget push ${{ env.ARTIFACTS }} --source 'https://api.nuget.org/v3/index.json' --api-key "${{ steps.login.outputs.NUGET_API_KEY }}" --skip-duplicate
