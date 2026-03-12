@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Windows.Input;
 using Maui.TouchEffect.Converters;
 using Maui.TouchEffect.Enums;
@@ -600,6 +600,8 @@ public partial class TouchEffect : RoutingEffect
 
     public object? LongPressCommandParameter => GetLongPressCommandParameter(Element);
 
+    // Required for Xaml SG, it will not read from the static methods
+    [TypeConverter(typeof(TimeSpanMillisecondTypeConverter))]
     public TimeSpan LongPressDuration => GetLongPressDuration(Element);
 
     public ImageSource? DefaultImageSource => GetDefaultImageSource(Element);
