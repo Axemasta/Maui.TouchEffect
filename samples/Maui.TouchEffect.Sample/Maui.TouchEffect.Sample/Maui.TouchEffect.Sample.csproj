@@ -8,6 +8,8 @@
         <SingleProject>true</SingleProject>
         <ImplicitUsings>enable</ImplicitUsings>
 
+        <MauiXamlInflator>SourceGen</MauiXamlInflator>
+        
         <!-- Display name -->
         <ApplicationTitle>Maui.TouchEffect.Sample</ApplicationTitle>
 
