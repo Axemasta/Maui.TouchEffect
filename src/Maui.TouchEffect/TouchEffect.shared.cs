@@ -964,7 +964,7 @@ public partial class TouchEffect : RoutingEffect
         return bindable?.GetValue(DefaultBackgroundColorProperty) as Color;
     }
 
-    public static void SetNormalBackgroundColor(BindableObject? bindable, Color value)
+    public static void SetDefaultBackgroundColor(BindableObject? bindable, Color value)
     {
         bindable?.SetValue(DefaultBackgroundColorProperty, value);
     }
@@ -994,7 +994,7 @@ public partial class TouchEffect : RoutingEffect
         return (double)(bindable?.GetValue(DefaultOpacityProperty) ?? throw new ArgumentNullException(nameof(bindable)));
     }
 
-    public static void SetNormalOpacity(BindableObject? bindable, double value)
+    public static void SetDefaultOpacity(BindableObject? bindable, double value)
     {
         bindable?.SetValue(DefaultOpacityProperty, value);
     }
@@ -1024,7 +1024,7 @@ public partial class TouchEffect : RoutingEffect
         return (double)(bindable?.GetValue(DefaultScaleProperty) ?? throw new ArgumentNullException(nameof(bindable)));
     }
 
-    public static void SetNormalScale(BindableObject? bindable, double value)
+    public static void SetDefaultScale(BindableObject? bindable, double value)
     {
         bindable?.SetValue(DefaultScaleProperty, value);
     }
@@ -1054,7 +1054,7 @@ public partial class TouchEffect : RoutingEffect
         return (double)(bindable?.GetValue(DefaultTranslationXProperty) ?? throw new ArgumentNullException(nameof(bindable)));
     }
 
-    public static void SetNormalTranslationX(BindableObject? bindable, double value)
+    public static void SetDefaultTranslationX(BindableObject? bindable, double value)
     {
         bindable?.SetValue(DefaultTranslationXProperty, value);
     }
@@ -1084,7 +1084,7 @@ public partial class TouchEffect : RoutingEffect
         return (double)(bindable?.GetValue(DefaultTranslationYProperty) ?? throw new ArgumentNullException(nameof(bindable)));
     }
 
-    public static void SetNormalTranslationY(BindableObject? bindable, double value)
+    public static void SetDefaultTranslationY(BindableObject? bindable, double value)
     {
         bindable?.SetValue(DefaultTranslationYProperty, value);
     }
@@ -1114,7 +1114,7 @@ public partial class TouchEffect : RoutingEffect
         return (double)(bindable?.GetValue(DefaultRotationProperty) ?? throw new ArgumentNullException(nameof(bindable)));
     }
 
-    public static void SetNormalRotation(BindableObject? bindable, double value)
+    public static void SetDefaultRotation(BindableObject? bindable, double value)
     {
         bindable?.SetValue(DefaultRotationProperty, value);
     }
@@ -1144,7 +1144,7 @@ public partial class TouchEffect : RoutingEffect
         return (double)(bindable?.GetValue(DefaultRotationXProperty) ?? throw new ArgumentNullException(nameof(bindable)));
     }
 
-    public static void SetNormalRotationX(BindableObject? bindable, double value)
+    public static void SetDefaultRotationX(BindableObject? bindable, double value)
     {
         bindable?.SetValue(DefaultRotationXProperty, value);
     }
@@ -1174,7 +1174,7 @@ public partial class TouchEffect : RoutingEffect
         return (double)(bindable?.GetValue(DefaultRotationYProperty) ?? throw new ArgumentNullException(nameof(bindable)));
     }
 
-    public static void SetNormalRotationY(BindableObject? bindable, double value)
+    public static void SetDefaultRotationY(BindableObject? bindable, double value)
     {
         bindable?.SetValue(DefaultRotationYProperty, value);
     }
@@ -1229,7 +1229,7 @@ public partial class TouchEffect : RoutingEffect
         return (int)(bindable?.GetValue(DefaultAnimationDurationProperty) ?? throw new ArgumentNullException(nameof(bindable)));
     }
 
-    public static void SetNormalAnimationDuration(BindableObject? bindable, int value)
+    public static void SetDefaultAnimationDuration(BindableObject? bindable, int value)
     {
         bindable?.SetValue(DefaultAnimationDurationProperty, value);
     }
@@ -1244,7 +1244,7 @@ public partial class TouchEffect : RoutingEffect
         return (Easing?)bindable.GetValue(DefaultAnimationEasingProperty);
     }
 
-    public static void SetNormalAnimationEasing(BindableObject? bindable, Easing? value)
+    public static void SetDefaultAnimationEasing(BindableObject? bindable, Easing? value)
     {
         bindable?.SetValue(DefaultAnimationEasingProperty, value);
     }
